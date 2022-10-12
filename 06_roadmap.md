@@ -18,7 +18,7 @@ Here are a few things that we still have left to do, as well as some ideas on fu
 - Add testing to the python packages (e.g. using `pytest`)
 - Build a documentation website for the python packages (autogenerate from doc strings)
 	- may want to convert python doc strings to the "REst" format, the most common format. [Here is a package](https://github.com/dadadel/pyment) you can do that with.
-- Cerate a dynamic tiling server
+- Create a dynamic tiling server
   - see [titiler](https://developmentseed.org/titiler/dynamic_tiling/), [ways to use Cloud Optimized GeoTIFF](https://medium.com/devseed/cog-talk-part-2-mosaics-bbbf474e66df), [lambda-tiler](https://github.com/vincentsarago/lambda-tiler)
   - This would allow for some features that have been requested, namely:
     - recolor web tiles on the fly (e.g. a user viewing a map could set their own color scale for all of the raster layers)
