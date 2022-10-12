@@ -6,12 +6,12 @@ The end goal of creating tiles is to display them in an interactive web map, whe
 - MetacatUI is web software we build that includes features like a searchable data catalog, data submission form, and data portals
 	- [MetacatUI documentation](https://nceas.github.io/metacatui/)
 	- [MetacatUI on GitHub](https://github.com/NCEAS/metacatui)
-- The [KNB](https://knb.ecoinformatics.org/), [ADC](https://arcticdata.io/catalog), [DataONE site](), are all use the MetacatUI software. "Test" versions of these MetacatUI deployments also exist: [dev.nceas](https://dev.nceas.ucsb.edu/), [demo ADC](https://demo.arcticdata.io/), [test ADC](https://test.arcticdata.io/), [test DataONE](https://search.test.dataone.org), among others.
+- The [KNB](https://knb.ecoinformatics.org/), [ADC](https://arcticdata.io/catalog), [DataONE site](), all use the MetacatUI software. "Test" versions of these MetacatUI deployments also exist: [dev.nceas](https://dev.nceas.ucsb.edu/), [demo ADC](https://demo.arcticdata.io/), [test ADC](https://test.arcticdata.io/), [test DataONE](https://search.test.dataone.org), among others.
 - We are continually adding features and fixing bugs, see [the list of issues](https://github.com/NCEAS/metacatui/issues)
 
 ## Portals
 - Data portals are one of the features of MetacatUI.
-- A portal is essentially a small website that users can build for their project. It includes a custom collection of data, and ways to display some information about that data their project.
+- A portal is essentially a small website that users can build for their project. It includes a custom collection of data and ways to display information about that data as well as their project.
 	- Learn more about portals [on the DataONE site](https://www.dataone.org/plus/) and [on the ADC site](https://arcticdata.io/data-portals/)
 - Here are some example portals:
 	- https://knb.ecoinformatics.org/portals/SASAP
@@ -23,7 +23,7 @@ The end goal of creating tiles is to display them in an interactive web map, whe
 ### Creating & editing portals
 - Portals can be created & edited in [the portal builder](https://demo.arcticdata.io/edit/portals) in MetacatUI.
 - Under the hood, the portal builder is just editing a portal document, which is some XML that configures each portal.
-- The XML that creates a portal is defined by the [portal & collections schema](https://github.com/DataONEorg/collections-portals-schemas). (Not all [version 1.1.0](https://github.com/DataONEorg/collections-portals-schemas/releases/tag/1.1.0) schema features are supported in MetacatUI yet. [Here](https://github.com/NCEAS/metacatui/issues?q=is%3Aopen+is%3Aissue+label%3A%22portals+1.1.0+support%22)is what we have left to do.)
+- The XML that creates a portal is defined by the [portal & collections schema](https://github.com/DataONEorg/collections-portals-schemas). (Not all [version 1.1.0](https://github.com/DataONEorg/collections-portals-schemas/releases/tag/1.1.0) schema features are supported in MetacatUI yet. [Here](https://github.com/NCEAS/metacatui/issues?q=is%3Aopen+is%3Aissue+label%3A%22portals+1.1.0+support%22) is what we have left to do.)
 - Changes to portals can also be made by downloading the portal XML, editing it, then uploading the new version via the DataONE API.
 	- [Here](https://nceas.github.io/datateam-training/reference/customizing-data-portals.html#updating-portals) are instructions on how to do that in R. (Also feel free to ask Robyn for further help/explanation!)
 		-  The `formatId` for portal xml documents is `https://purl.dataone.org/portals-1.1.0` defined [in DataONEorg/object-format](https://github.com/DataONEorg/object-formats/blob/fbef1ec3d3c6d14ac4331414627ad252b6cf314d/objectFormatListV2.xml#L987-L993) 
@@ -34,7 +34,7 @@ df <- query(ucsb, list(q ="label:permafrost AND (*:* NOT obsoletedBy:*)",
                        fl = "identifier,formatId,seriesId"),
             as = "data.frame")
 ```
-(The above `query` function is doing a solr query, you can read more about that [here](https://nceas.github.io/datateam-training/reference/solr-queries.html))
+(The above `query` function is doing a [solr](https://solr.apache.org/) query, you can read more about that [here](https://nceas.github.io/datateam-training/reference/solr-queries.html))
 
 ### PDG portal
 When we have tiles/layers to test or publish, we add them to either the demo or production version of the Permafrost Discovery Gateway portal .
@@ -81,7 +81,7 @@ The `ConfigManager` class in the `pdgstaging` library includes a [`get_metacatui
 
 ## Cesium
 - Cesium JS is the software that we use to make the map page in portals. We build our own UI (layers list, buttons, etc.) around the Cesium map. For more about Cesium, see the list of [useful links in the MetacatUI map guide](https://nceas.github.io/metacatui/guides/maps/cesium.html#useful-links)
-- [Cesium Ion](https://cesium.com/platform/cesium-ion/) is a paid service from the same people who build the open source Cesium JS library. It can convert some file types to Cesium 3D tiles, but not shapefiles! [FME](https://www.safe.com/convert/arcgis-shp/cesium-3d-tiles/)is the only software out there, other than our `py3dtiles` library, that converts shapefiles to 3D tiles (and it's quite expensive!)
+- [Cesium Ion](https://cesium.com/platform/cesium-ion/) is a paid service from the same people who build the open source Cesium JS library. It can convert some file types to Cesium 3D tiles, but not shapefiles! [FME](https://www.safe.com/convert/arcgis-shp/cesium-3d-tiles/) is the only software out there, other than our `py3dtiles` library, that converts shapefiles to 3D tiles (and it's quite expensive!)
 
 # Other ways to test your data
 Other than updating a portal document and displaying data on the web, you can also test tiles you've created by:

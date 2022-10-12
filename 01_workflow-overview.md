@@ -18,11 +18,7 @@ Currently our visualization pipeline is designed to take vector files (shapefile
 
 ## Output formats
 
-### Cesium 3D tiles
-
-TODO
-
-### Web tiles
+### Web tiles (raster data)
 
 To display raster data on the web, we convert them to web tiles: png or jpeg image files that are of a standard size, cover a known geospatial area, and are of a known resolution.
 
@@ -42,3 +38,18 @@ a collection of standardized tile matrix sets, see [the docs](https://docs.openg
 
 **WorldCRS84Quad**
 the OCG 2D TMS that we have generally been using for the tiles we create because it is supported by Cesium. Defined [here](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html#64).
+
+
+### Cesium 3D tiles (vector data)
+
+Cesium 3D Tiles is a specification for displaying vector data in 3D. It allows for breaking large vector datasets into smaller pieces which can be downloaded as need in the browser, so it's also great for displaying very large 2D vector data.
+
+A 3D tile comprises two parts: The tile content (the spatial information about the structure of the 3D object), and metadata about that content. In the Cesium 3D Tile specification, tile content can be represented in three different formats: Batched 3D Models, Instanced 3D Model, and Point Clouds. For our purposes thus far, we are creating **Batched 3D Models** (files with the extension `.B3DM`). The metadata is always represented with JSON that is referred to as the "Tileset".
+
+We create a a hierarchy of Tileset JSON, so that the browser can download information incrementally as the user zooms into the area with 3D tiles. The 3D tiles are not rendered until the user is sufficiently zoomed in (how zoomed in they must be to render tiles is defined in the Tileset JSON by the "geometricError").
+
+Here are some resources to learn more about Cesium 3D Tiles:
+
+- [Introductory info about 3D tiles](https://cesium.com/why-cesium/3d-tiles/)
+- [Reference card](https://github.com/CesiumGS/3d-tiles/blob/main/3d-tiles-reference-card.pdf) - A great place to start learning about the structure of 3D tiles. 
+- [The complete specification](https://github.com/CesiumGS/3d-tiles) - For in-depth details about the spec. See it in [HTML](https://docs.opengeospatial.org/cs/18-053r2/18-053r2.html).

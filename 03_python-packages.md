@@ -16,7 +16,7 @@ This package deals with the conversion of vector data into rasters - both GeoTIF
 
 The original `py3dtiles` python library was original created by an organization named Oslandia and is under active development and maintenance on Gitlab. It was designed to convert point data into Cesium 3D tiles. We have forked and extended it so that it can be used to convert polygons to Cesium 3D tiles.
 
-We should try to keep our version of the package up-to-date with the gitlab/Oslandia version, so that we can include their fixes & enhancements. I watch follow changes on the Gitlab repo and pull them in every two weeks or as needed. Instructions on how to pull in changes from Gitlab to GitHub are [documented in the readme of the repo](TODO).
+We should try to keep our version of the package up-to-date with the gitlab/Oslandia version, so that we can include their fixes & enhancements. I watch follow changes on the Gitlab repo and pull them in every two weeks or as needed. Instructions on how to pull in changes from Gitlab to GitHub are [documented in the readme of the repo](https://github.com/PermafrostDiscoveryGateway/py3dtiles/blob/main/README.rst).
 
 Eventually it would be awesome to do a merge request and give them the change to incorporate the changes we made back into their library.
 
@@ -25,7 +25,7 @@ Eventually it would be awesome to do a merge request and give them the change to
 
 The viz-3d tiles package is essentially a wrapper around the py3dtiles library. It adds classes & functions for building the heirachy of Cesium 3D tileset JSON files, and for reading in shapefiles
 
-Since it was created, some of these classes were developed into the original `py3dtiles` library. We might want to eventually make use of those new classes instead. TODO: issue link
+Since it was created, some of these classes were developed into the original `py3dtiles` library. We might want to eventually make use of those new classes instead. See [PermafrostDiscoveryGateway/py3dtiles issues#6](https://github.com/PermafrostDiscoveryGateway/py3dtiles/issues/6).
 
 ## viz-workflow (pdg_workflow)
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
