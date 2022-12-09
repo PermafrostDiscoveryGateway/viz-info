@@ -1,0 +1,129 @@
+---
+title: "Update PDG Portal"
+author: "Robyn"
+date: "2021-09-02"
+---
+
+This gets then uploads the Cesium test portal XML doc
+
+---
+Remember to add token!
+---
+
+
+```{r}
+
+library(dataone)
+library(arcticdatautils)
+library(tidyverse)
+
+# Remember to set your token for production
+options(dataone_token = "")
+
+# Remember to set your token for staging
+options(dataone_test_token = "")
+
+# Get the PID and SID for the newest version of the portal with a given label
+find_latest_portal <- function(portal_label, cnName="STAGING", mnName="urn:node:mnTestKNB") {
+	
+	cn <- CNode(cnName)
+	d1n <- getMNode(cn, mnName)
+	
+	all_versions <- query(d1n, list(q=paste0("label:\"", portal_label, "\" OR seriesId:\"", portal_label, "\""),
+	                fl="seriesId,id,label,datasource,dateUploaded",
+	                rows="640"),
+	      as = "data.frame")
+	
+	newest_version <- all_versions %>% 
+		mutate(dateUploaded = as.POSIXct(dateUploaded)) %>% 
+		arrange(desc(dateUploaded)) %>% 
+		slice(1)
+	
+	newest_pid <- newest_version$id
+	seriesId <- newest_version$seriesId
+	
+	return(c(pid = newest_pid, sid = seriesId))
+}
+
+# Download the XML for the latest portal with a given label
+download_latest_portal <- function(portal_label, cnName="STAGING", mnName="urn:node:mnTestKNB", path="permafrost-portal.xml") {
+
+	d1c <- D1Client(cnName, mnName)
+	
+	portalIds <- find_latest_portal(portal_label, cnName, mnName)
+	
+	# Download the object
+	dataObj <- getDataObject(d1c, id=portalIds['pid'])
+	data <- getData(dataObj)
+	writeBin(data, con = path)
+	
+	return(portalIds)
+}
+
+# Replace the newest version of portal with the given label with a new/updated XML document
+update_portal <- function(portal_label, cnName="STAGING", mnName="urn:node:mnTestKNB", path="permafrost-portal.xml") {
+	
+	cn <- CNode(cnName)
+	d1n <- getMNode(cn, mnName)
+	
+	portalIds <- find_latest_portal(portal_label, cnName, mnName)
+	# Download the object
+	
+	id_new <- update_object(d1n, 
+                        pid = portalIds['pid'],
+                        path = path,
+						sid = portalIds['sid'],
+                        format_id = "https://purl.dataone.org/portals-1.1.0")
+
+	return(id_new)
+}
+```
+
+
+## PRODUCTION permafrost portal: https://arcticdata.io/catalog/portals/permafrost/
+
+```{r}
+# PRODUCTION PORTAL
+label <- "permafrost"
+cnName <- "PROD"
+mnName <- "urn:node:ARCTIC"
+path <- "permafrost-portal.xml"
+download_latest_portal(label, cnName=cnName, mnName=mnName, path=path)
+# update portal xml doc manually here, then run the next line to update
+update_portal(label, cnName=cnName, mnName=mnName, path=path)
+```
+
+
+## Demo permafrost portal: https://demo.arcticdata.io/portals/permafrost
+
+Download the latest portal
+```{r}
+# TEST KNB (dev.nceas.ucsb.edu)
+label <- "permafrost"
+cnNameStage <- "STAGING"
+mnNameStage <- "urn:node:mnTestKNB"
+pathStage <- "~/Desktop/permafrost-portal.xml"
+download_latest_portal(label, cnName=cnNameStage, mnName=mnNameStage, path=pathStage)
+```
+
+Update portal xml doc manually, then run the next line to push updates
+```{r}
+update_portal(label, cnName=cnNameStage, mnName=mnNameStage, path=pathStage)
+```
+
+## Production permafrost portal: https://arcticdata.io/catalog/portals/permafrost/
+
+Download the latest portal
+```{r}
+# ADC (arcticdata.io)
+label <- "permafrost"
+cnName <- "PROD"
+mnName <- "urn:node:ARCTIC"
+path <- "~/Desktop/demo-permafrost-portal.xml"
+download_latest_portal(label, cnName=cnName, mnName=mnName, path=path)
+```
+
+Update portal xml doc manually, then run the next line to push updates
+```{r}
+update_portal(label, cnName=cnName, mnName=mnName, path=path)
+```
