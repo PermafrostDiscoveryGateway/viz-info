@@ -84,7 +84,64 @@ The `ConfigManager` class in the `pdgstaging` library includes a [`get_metacatui
 - [Cesium Ion](https://cesium.com/platform/cesium-ion/) is a paid service from the same people who build the open source Cesium JS library. It can convert some file types to Cesium 3D tiles, but not shapefiles! [FME](https://www.safe.com/convert/arcgis-shp/cesium-3d-tiles/) is the only software out there, other than our `py3dtiles` library, that converts shapefiles to 3D tiles (and it's quite expensive!)
 
 # Other ways to test your data
-Other than updating a portal document and displaying data on the web, you can also test tiles you've created by:
-- Running cesium locally. The viz-3dtiles repo has the files & instructions you need for an [easy setup](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles/tree/main/test/run-cesium)
-- Test in cesium sandcastle, a free online sandbox for testing things in Cesium.
+
+Other than updating a portal document and displaying data on the web, you can also test tiles you've created by either 1) running Cesium locally, or 2) testing with Cesium sandcastle.
+
+## Option 1: Run Cesium Locally
+- The `viz-3dtiles` repo has the files & instructions you need for an [easy setup](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles/tree/main/test/run-cesium)
+
+### Steps:
+
+1. On your local machine, clone the `viz-3dtiles` repo.
+
+2. Using Homebrew in the terminal, install `express.js` by running running `brew install node` then `npm install express`
+
+3. In the terminal, navigate to the directory `viz-3dtiles/test/run-cesium` and run `node server.js`. This should return a print statement in your terminal like `Now running at http://localhost:3003`. Navigate to that URL in your browser.
+
+4. On the [Cesium site](https://cesium.com/ion/signin), create an account to obtain a personal token.
+
+5. Replace the entire contents of the `/viz-3dtiles/test/run-cesium/cesium.js` file with:
+
+```
+Cesium.Ion.defaultAccessToken = "YOUR TOKEN HERE"; // <- update this
+
+const viewer = new Cesium.Viewer('cesiumContainer');
+
+const imageryLayers = viewer.imageryLayers;
+
+const myNewProvider = new Cesium.WebMapTileServiceImageryProvider({
+  "url": "https://demo.arcticdata.io/cesium-layers/raster-imagery/bartsch_infrastructure/WorldCRS84Quad/{TileMatrix}/{TileCol}/{TileRow}.png",
+  "tilingScheme": new Cesium.GeographicTilingScheme()
+})
+const myNewLayer = new Cesium.ImageryLayer(myNewProvider)
+imageryLayers.add(myNewLayer)
+```
+
+and be sure to insert your token.
+
+6. Refresh your browser to reflect these changes to `cesium.js`
+
+7. To show the layer you created, transfer all the new PNG web tiles from the server to your local directory `viz-3dtiles/test/run-cesium/web-tiles`. For example, in your local machine's terminal, run `scp username@datateam:/home/username/viz-workflow/web_tiles ~/Documents/viz-3dtiles/test/run-cesium/web-tiles`
+
+8. Within `cesium.js`, change
+
+```
+"url": "https://demo.arcticdata.io/cesium-layers/raster-imagery/bartsch_infrastructure/WorldCRS84Quad/{TileMatrix}/{TileCol}/{TileRow}.png",
+```
+
+to the path to your local web tiles, such as:
+
+```
+"url": "web-tiles/iwp_coverage/WGS1984Quad/{TileMatrix}/{TileCol}/{TileRow}.png",
+```
+
+The above file path needs to be adjusted to reflect the web tiles you want to visualize.
+
+9. Refresh your browser and admire the data! 
+
+10. To kill the local host, close the terminal window or use `ctrl` + `c`
+
+## Option 2: Test in cesium sandcastle
+
+- Cesium sandcastle is a free online sandbox for testing things in Cesium.
 	- [Here](https://sandcastle.cesium.com/#c=bVPvb5swEP1XTuwLnYLN0k6qaFpN6pC6KWq6hLaaxBeDL4lXYyPbpD+m/u8zEFqiDoTw+e5x770zpVbWwU7gIxo4B4WPcIlWNBW56/bCPCi7+FIrx4RCkwdHZ7nKVdkhnZBo0R1C+9fx96xPhn9zBUAp3C7nCdxfpcsU7lNYZQu/WNwuIVvcRPP0Lp1D9mOertIMfq4W1y2oMTKBPNg6V9uEUo6VJsyUTpScOUaEpj27SLJnNJYe82jPyFIl3AtG03g69dkHjMotUxuk99pIfrlcnZ78ahincXuTP1arPJjk6rUX58leL7I0gd+6gUchpZeHHJyGF60rEArWjXFb79laG/CL3oi2wDpmHBhUHI1Qm1ztCRGDjD/fGF0Ji6024mEqXDfKy9EKwn3dEXR2wX4oxJaokNRGVMKJHVrCOH+rPTsobbllOuz3YJjNZIhHE7ryXDy5G+HK7bK15Q0EEJN48h5FMfk6CgcxhW5U+4VV7U1AYvznGgufYUriofioX/QcX7uIlMw3HGlGY7R5U9weKS2RSL3ZZ/bYs2AS5EEXDA/AzLpniRdDu2+iqrV33h+ZkBDqsKolc2hp0ZQPnnFp7WAXwCentSyYGTq3V8HKh41pdSVgNgULT6YTGJ6YnL6jAWo/BK8+gZP6abRdaOOnHvVuHCZfP7QWqm7cmMAOjT/YTEZMio1KoBKcS/zYNXK6TmB60HlIFdo5XR1m961ndGzYjIsdCH7+n/8bSsms9Zl1I+VKvGAeXMyor/8Albo7RgvP3P+Abdn2y8W83ySEzKgPx8h/)'s an editable example that renders some 3D tiles we made
