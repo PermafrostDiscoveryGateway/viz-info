@@ -10,7 +10,35 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 4. Create a virtual environment with `python=3.9` and install __local__ versions of the 3 PDG packages (using `pip install -e {LOCAL PACKAGE}`), `ray` with pip, and `glances` with conda forge instead of pip. This way, changes integrated with pulls or saved manual changes will __automatically__ be implemented into that virtual environment if the local package was installed with `-e` (stands for "editable") and you are running a script from the terminal. If you are running a jupyter notebook, you will need to restart the kernel too to integrate the changes. A to-do improvement is to create a requirements file for all these installations, or hard-code a file path to a pre-made conda environment in the `scratch` dir on Delta that can be activated by any user running `/scratch/{ALLOCATION ID}/{SUBFOLDER}/{ENVIRONMENT}` in a terminal.
 5. Make sure the most recent footprints and IWP data files have been synced from the `scratch` to `/tmp` dir on Delta. In a new terminal, run `python viz-workflow/utilities/rsync_footprints_to_nodes.py`. You do __not__ want to change the filepath for the source directory for the `rsync` command in this script, because the footprints are stored in Kastan's directory. However, if a new set of footprints are created from the pre-processing team, they might transfer them elsewhere on Delta, in which case the source directory __will__ need to be changed. Overall, running this script is necessary to do before each job because at the end of the last job, the `/tmp` dirs on the active nodes are wiped. We do not just pull directly from the `scratch` dir because the workflow runs much slower that way (a very low % CPU usage) since the `scratch` dir is not directly on the node like the `/tmp` dir is. Similarly, when we write files we do so to the `/tmp` dir then `rsync` them back to scratch after to save time. This step is manually done, but one of our to-do's is to automate this step.
 6. After running that script, continue to check the size of the `/tmp` dir in a separate terminal. From the `/tmp` dir, you can run `ds staged_footprints -d0`. When the MB stops growing (usually just takes 5-10 min), you know the sync is complete. Alternatively, you could run `find staged_footprints -type f | wc -l` and check when the number of files stops growing. Kastan and Robyn suggested that this step be automated, which would inlcude either doing this file transfer in parallel, then consolidating the synced files to the same dir, or "tarring" the files together before the transfer, transfer that consolidated file, then un-tar the files in the `/tmp` dir. 
-7. Change any hard-coded filepaths in `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` so they represent your username rather than Kastan's. I think a good approach is just to cmd + f "kastan" to locate the relevant paths. Kastan ensured that subfolders in the path will automatically be created if they do not already exist. These filepaths may have already been taken care of with Kastan's recent improvements to this file, such as his inclusion of a variable for one's username rather than a hard-coded username, but just give the script a quick glance to make sure. As noted by Kastan and Robyn, this script could be improved by integrating the logging system Robyn utilizes in the PDG packages. These should be integrated __inside__ the `@ray.remote` functions. Another to-do! 
+7. Adjust `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` as needed:
+    - Change any hard-coded filepaths so they represent your username rather than Kastan's. I think a good approach is just to cmd + f "kastan" to locate the relevant paths. Kastan ensured that subfolders in the path will automatically be created if they do not already exist. These filepaths may have already been taken care of with Kastan's recent improvements to this file, such as his inclusion of a variable for one's username rather than a hard-coded username, but just give the script a quick glance to make sure. 
+    - Within the `try:` part of the first function def (`main()`), there are a few lines that need to be commented/uncommented out depedning on your stage in the workflow:
+    ```python
+        try:
+            ########## MAIN STEPS ##########
+            print("Starting main...")
+            
+            # (optionally) Comment out steps you don't need 😁
+            # todo: sync footprints to nodes.
+            # step0_staging()                                     # Good staging. Simple & reliable. 
+            # todo: merge_staging()
+            # step1_3d_tiles()
+            
+            # mem_testing = False        
+            # if mem_testing:
+            #     from pympler import tracker
+            #     tr = tracker.SummaryTracker()
+            #     tr.print_diff()
+            #     step2_raster_highest(batch_size=100)                # rasterize highest Z level only 
+            #     tr.print_diff()
+            
+            # args = 
+            step2_raster_highest(batch_size=100, cmd_line_args = args)                # rasterize highest Z level only 
+            # step3_raster_lower(batch_size_geotiffs=100)         # rasterize all LOWER Z levels
+            # step4_webtiles(batch_size_web_tiles=250)            # convert to web tiles.
+    ```
+    The first comment reminds you to `rsync` the footprints. All lines including and following `step0_staging()` should be uncommented if you are just starting the workflow, and intend to run it start to finish, which is likely the case. This system of commenting out certain steps was designed to help pick up the workflow halfway if there was an error. Perhaps Robyn or Kastan have a preference to only uncomment the first step, `step0_staging()`, then do a manual check to make sure all went well and merge the staged tiles, __then__ move onto the next steps with those steps now commented out.
+As noted by Kastan and Robyn, this script could be improved by integrating the logging system Robyn utilizes in the PDG packages. These should be integrated __inside__ the `@ray.remote` functions. Another to-do! 
 8. Optional: check jobs that are already in progress by opening `nodes_array.txt`, but note that output files from other team members' jobs should be saved to their own home directory, so there should not be issues with your run.
 9. Claim some worker nodes to eventually launch a job. By default, you are logged into the head node (login 1, 2, or 3) which should __not__ be the node that executes the bulk of the computation (you actually cannot be charged money for this node). In the same terminal, run `squeue | grep {USERNAME}` (a slurm command) to display info about the jobs in the scheduling queue and which node(s) each are running on. This list will be empty of you haven't launched any jobs yet. Then take a look at the script that will soon be run for the IWP data, within the dir `viz-workflow/slurm/BEST-v2_gpu_ray.slurm`. In order to open this from the terminal, run `cat BEST-v2_gpu_ray.slurm`. (If the most up-to-date script changes from this one moving forward, open that script instead.) The lines at the top of this slurm script that start with `#SBATCH` are __not__ regular comments, they are settings. Other lines in the script that start with just `#` are regular comments. 
     - Look at the line `#SBATCH --nodes={NUMBER}` which represetns the number of nodes that will process the IWP data. Increase this if desired, 5 is a good number. 
@@ -34,8 +62,6 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 17. After the script is done, merge the files processed on different nodes with the function `merge_staging()`, which consolidates all files to the first (lowest #) node.
 18. To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job. No more credits are being used.
 
-**To be added to these instructions:**
-- more details for manually running `merge_staging()` function
 
 
 
