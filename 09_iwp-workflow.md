@@ -4,11 +4,11 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 ## Steps:
 
-1. ssh into the Delta server
+1. ssh into the Delta server in VScode.
 
-2. Clone (for first time) or pull (if not first time) from `PermafrostDiscoveryGateway/viz-workflow` repositiory [here](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) to your home directory and swtich into the `ray-workflow` branch.
+2.  Pull updates from `PermafrostDiscoveryGateway/viz-workflow` repository [here](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) to your home directory and switch into the `ray_workflow` branch.
 
-3. Clone (for first time) or pull (if not first time) the 3 PDG packages ([`viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging), [`viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster/tree/main), [`viz-3dtiles`](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles)) and ensure you're in the main branch of each.
+3. Pull updates from the 3 PDG packages ([`viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging), [`viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster/tree/main), [`viz-3dtiles`](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles)) and ensure you're in the main branch of each.
 
 4. Create a virtual environment (recommended to use `venv` as package manager instead of `conda`) with `python=3.9` and install __local__ versions of the 3 PDG packages (using `pip install -e {LOCAL PACKAGE}`), `ray` with pip, and `glances`.
     - Changes integrated with pulls or saved manual changes will __automatically__ be implemented into that virtual environment if the local package was installed with `-e` (stands for "editable") and you are running a script from the terminal.
@@ -75,7 +75,8 @@ As noted by Kastan and Robyn, this script could be improved by integrating the l
 
 11. In that `tmux` terminal, run `sbatch BEST-v2_gpu_ray.slurm` to launch the job on the number of nodes you specified within that file. At this point, credits are being charged to the allocation. The terminal will print something along the lines of "Submitted batch job #######", a unique ID for that job.
     - Optional: check jobs that are in progress by opening `nodes_array.txt`, but note that output files from other team members' jobs should be saved to their own home directory, so there should not be issues with your run. This file is not pushed to GitHub, it is written by the `slurm` script and only applies to the current run. 
-12. Run the script that we edited earlier to import the config, define all custom functions necessary for the workflow, and execute the steps: `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` (Robyn or Kastan can correct this step if it is in the wrong order or needs to be adjusted). This will only run the staging step, on all nodes.
+
+12. Run the script that we edited earlier to import the config, define all custom functions necessary for the workflow, and execute the steps: `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`. This will only run the staging step, on all nodes, since the staging step was the only one we uncommented in that script.
 
 13. Run `squeue | grep {USERNAME}` again to see the new job that has appeared at the top of the list.
     - This job may be momentarily noted that it is a `(Priority)` or something else within parenthesis that specifies why it has not been started. For example, it may show `(Resources)` which means the allocation's resources are already being utilized by other jobs. Check here for clues to troubleshoot an error in starting a job.
@@ -83,21 +84,35 @@ As noted by Kastan and Robyn, this script could be improved by integrating the l
     - The current runtime for each job is also noted in this output, which helps you track how much time you have left to finish your job.
 
 14. Still within the `viz-workflow/slurm` dir, ssh into the node associated with that job by running `ssh {code}`. Recall that you are already in a `tmux` session, which you switched into before running the `sbatch` command to start the workflow script.
+    - **To ask Robyn/Kastan: I am not sure I fully understand how to ssh into a node, would like to see quick example**
 
-15. In a separate terminal, run `glances` to track memory usage and such as the script runs. This helps troubleshoot things like memory leaks. You can determine if issues are related to the network connection and `iowait`, or the code itself.
+15. In a separate terminal, within your virtual environment, run `glances` to track memory usage and such as the script runs. This helps troubleshoot things like memory leaks. You can determine if issues are related to the network connection and `iowait`, or the code itself.
     - CPU usage should be at 100% for optimal performance, but it has fluctuated around 40% before, indicating a bottleneck. This could be the result of other users heavily utilziing the cluster you're working on, which slows down your processing but is out of your control.
+    - **To ask Robyn/Kastan: do you need to add an additional step before running `glances` in order to only view the memory usage and such for this job?**
 
 16. Open the file [merge_staged_vector_tiles.py](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/8e68894b522faa619a4a7cb2dc2e10affc652c44/utilities/merge_staged_vector_tiles.py), then:
-    - Follow the instructions at the top: [`Usage Instructions in main()`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/8e68894b522faa619a4a7cb2dc2e10affc652c44/utilities/merge_staged_vector_tiles.py#L79) to set the variables `RAY_ADDRESS`, `staged_dir_path_list`, and `merged_dir_path`.
-    - **Question for Robyn:** How do I set the `RAY_ADDRESS` variable as the instructions say?
-    - Change hard-coded filepath for `BASE_DIR` (should be Juliet's scratch dir, and then subdir for staged files) for all staged files no matter what node processed them) 
-    - Change filepath for `merged_dir_path` (where merged staged files will live). Merge the staged tiles processed on different nodes with the function `merge_all_staged_dirs()` (defined [here](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/8e68894b522faa619a4a7cb2dc2e10affc652c44/utilities/merge_staged_vector_tiles.py#L132)) to consolidate all staged files to the first (lowest #) node. I think this is done by just running the whole script after editing the filepaths?
+    - There are instructions at the top of this script that the following bullet points walk through ([`Usage Instructions in main()`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/8e68894b522faa619a4a7cb2dc2e10affc652c44/utilities/merge_staged_vector_tiles.py#L79)) to set the variables `RAY_ADDRESS`, `staged_dir_path_list`, and `merged_dir_path`.
+    - **Question for Robyn/Kastan: Do I set the `RAY_ADDRESS` variable as the instructions say or is that documentation outdated, and this step was already automated with [this line](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/0db036329c2046593983e5cd8450c9eb5c212b41/utilities/merge_staged_vector_tiles.py#L52)?**
+    - Change hard-coded filepath for `BASE_DIR` (should be Juliet's `/scratch` dir, and the subdir for staged files) for all staged files) 
+    - Change the string part of `merged_dir_path` (where merged staged files will live) to the lowest number node of the nodes you're using. 
+    - Remove this node from the `staged_dir_paths_list`
+    - Run this script to consolidate all staged files to the node you specified with the function `merge_all_staged_dirs()` (defined in the script itself [here](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/8e68894b522faa619a4a7cb2dc2e10affc652c44/utilities/merge_staged_vector_tiles.py#L132)).
+    - **To ask Robyn/Kastan: For the filepaths in this scripts, does it matter if they have a trailing `/`? Some do, some don't.**
+    - **To ask Robyn/Kastan: What is best practice to know when this consolidation is complete?**
 
-17. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()` because we just ran that and merged the staged output, and uncomment out the next step: `step1_3d_tiles()`. Then transfer all files from `/tmp` to scratch. Repeat for the rest of the steps in the workflow, and manually transfer the files from `/tmp` to scratch in between each step. Pay attention to the 24 hours limit!
+17. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()` (because we just did that and merged the staged output), and uncomment out the next step: `step1_3d_tiles()`. Run `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`
 
-18. To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job. No more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
+18. Transfer all files from `/tmp` to scratch using `rsync`.
+    - **To do: insert example rsync command, need to think about this because the /tmp files are all on different nodes, just like the staged ones were.**
 
-19. Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
+19. Repeat for the rest of the steps in the workflow, and manually transfer the files from `/tmp` to `/scratch` in between each step. Pay attention to the 24 hours limit!
+    - For raster files, utilize the script `/utilities/rsync_merge_raster_to_scratch.py`
+
+**To do: run commans to `rsync` files from /tmp to /scratch as they are processed (like at regular time intervals) so none are lost at 24 hrs**
+
+20. To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job. No more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
+
+21. Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
 
 
 
