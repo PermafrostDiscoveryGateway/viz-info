@@ -102,7 +102,8 @@ As noted by Kastan and Robyn, this script could be improved by integrating the l
 
 17. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()` (because we just did that and merged the staged output), and uncomment out the next step: `step1_3d_tiles()`. Run `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`
 
-18. Transfer all files from `/tmp` to scratch using `rsync`.
+18. Transfer all files from `/tmp` to `/scratch/bbki` using `rsync`.
+    - Even though we are using `bbou` credits, transfer the files to `bbki` because the latter is the allocation with unlimited credits gneerously provided by the Delta team. `/scratch/bbou` likely does not have enough storage space.
     - **To do: insert example rsync command, need to think about this because the /tmp files are all on different nodes, just like the staged ones were.**
 
 19. Repeat for the rest of the steps in the workflow, and manually transfer the files from `/tmp` to `/scratch` in between each step. Pay attention to the 24 hours limit!
