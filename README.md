@@ -9,3 +9,4 @@
 - [07: Resources](07_resources.md) - A list of potentially helpful links
 - [08: Getting started](08_getting-started.md) - Getting set-up and first tasks
 - [09: IWP workflow](09_iwp-workflow.md) - Steps to run the ice-wedge polygon workflow on the NCSA Delta server
+- [10: Update py3dtiles](10_update-py3dtiles.md) - Detailed steps to update py3dtiles with recent oslandia updates, test updates, and git flow for navigating the branches
