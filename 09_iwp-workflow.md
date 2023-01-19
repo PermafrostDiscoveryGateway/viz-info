@@ -76,8 +76,7 @@ As noted by Kastan and Robyn, this script could be improved by integrating the l
 
 10. Adjust `viz-workflow/PRODUCTION_IWP_CONFIG.py` as needed:
     - With the new batch of data, the data path will need to be updated to Juliet's scratch dir. After this, the input path will rarely need to be changed (only if the IWP data pre-processing is updated and therefore new files have been transferred).
-    - The output path will __always__ need to be changed, as we retain the outputs of past runs and do not overwrite them. Change the path following `/scratch/bbki/julietcohen`.
-        - Even though we are using `bbou` credits, transfer the files to `bbki` because the latter is the allocation with unlimited credits gneerously provided by the Delta team. `/scratch/bbou` likely does not have enough storage space.
+    - The output path will __always__ need to be changed, as we retain the outputs of past runs and do not overwrite them. Change the path following `/scratch/bbou/julietcohen/`.
     - There is an opportunity for automation here: use an f-string for the dir name, with a variable that is the date pulled from the command line so it is always different than the last run.
 
 11. Still within the `viz-workflow/slurm` dir, ssh into the head node associated with that job by running `ssh gpub059`. Recall that you are already in a `tmux` session, which you switched into before running the `sbatch` command to claim nodes. 
@@ -106,20 +105,20 @@ As noted by Kastan and Robyn, this script could be improved by integrating the l
     - **To ask Robyn/Kastan: For the filepaths in this scripts, does it matter if they have a trailing `/`? Some do, some don't.**
     - **To ask Robyn/Kastan: What is best practice to know when this consolidation is complete?**
 
-16. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()` (because we just did that and merged the staged output), and uncomment out the next step: `step1_3d_tiles()`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
+16. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step1_3d_tiles()`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
+    - These files are written directly to `/scratch` so no need to transfer from `/tmp`.
     - **To ask Robyn/Kastan: What is best practice to know when this step is complete?**
-
-17. After that step is complete, transfer all files from `/tmp` to `/scratch/bbki/julietcohen` using `rsync`.
-    - Even though we are using `bbou` credits, transfer the files to `bbki` because the latter is the allocation with unlimited credits gneerously provided by the Delta team. `/scratch/bbou` likely does not have enough storage space.
     - **To ask Robyn/Kastan: Are the steps following staging executed on multiple nodes, like the stagiing was? If so, don't these files need to be consolidated before using rsync?**
 
-18. Repeat for the rest of the steps in the workflow, and manually transfer the files from `/tmp` to `/scratch` in between each step. Pay attention to the 24 hours limit!
-    - For raster files, utilize the script `/utilities/rsync_merge_raster_to_scratch.py`, and change hard-coded paths before runnning.
-    - **To ask Robyn/Kastan: why is there not a similar script for transferring web tiles and 3d tiles? Seems to only be scripts set up for transferring staged and raster files.**
+17. Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step1_3d_tiles()`, and uncomment out the next steps: `step2_raster_highest(batch_size=100, cmd_line_args = args)` and `step3_raster_lower(batch_size_geotiffs=100)`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`. Once complete, change hard-coded paths in `utilities/rsync_merge_raster_to_scratch.py`, and run it.
+
+18. Return to the file and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)`
+    - These files are written directly to `/scratch` so no need to transfer from `/tmp`.
+    - **To ask Robyn/Kastan: Why do 3d-tiles and webtiles get written directly to scratch?**
 
 19. To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job, so no more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
-20. Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
+20. Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub. Move data off Delta before March or work with Delta team to ensure data won't be wiped.
 
 
 
