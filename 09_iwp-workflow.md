@@ -21,10 +21,13 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - Look at the line `#SBATCH --nodes={NUMBER}` which represents the number of nodes that will process the IWP data. Increase this if desired, 5 is a good number with sufficient CPU usage, but for the idnividual job for geotiff creation, Robyn used 10 because CPU usage was inefficient. 
     We are not sure how much increasing the nodes decreases the time, she only got through 95% of the staged files. Because of this node efficiency uncertainty, it is important to set up a special `rsync` script _before running the geotiff creation step_  that will continuously check for new geotiff files in the `/tmp` folder and sync them to `/scratch` _without needing to manually run an `rsync` script at intervals_. 
     - **To ask Kastan: any tips for increasing CPU usage?**
+        - It's a hard problem. It usually means there's a networking bottleneck from `/scratch`, i.e. pulling data (including footprints) from `/scratch`. The "easiest" workaround is to copy data to each node's /tmp directory. But there's not that much space on /tmp (750G on CPU nodes, and 1.5T on GPU nodes) so it can pretty easily fill up. 
     - **To ask Kastan: Can you point me to the parts of the workflow that you added to make a "workaround" for the data leak, before Robyn fixed it? I am curious if I can remove some of these additions if they are causing the delay in geotiff creation step.** 
+        - I think it's mostly just the command line arguments: https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/ray_workflow/IN_PROGRESS_VIZ_WORKFLOW.py#L88. 
     - Look at the line `#SBATCH --time=24:00:00` which represents the total amount of time a job is allowed to run (and charge credits based on minutes and cores) before it is halted. Decrease this if desired. This number of hours is multiplied by each node and the sum of all those values is the total number of CPU or GPU hours that is charged to your allocation. Do not use a full 24 hours if not needed, such as for an IWP test run on a small data sample.
     - Look at the line `#SBATCH --account={ACCOUNT NAME}` and enter the account name for the appropriate allocation. Note that our allocations come with GPU and CPU counterparts that are billed separately. We do __not__ store these private account names on GitHub, so pay attention to this line when you are pushing.
     - **To ask Kastan: You used GPU in our informational ray workflow meeting cause we were running low on CPU hours, which should be used if we have ample hours of both? I'm guessing CPU.**
+        - Yes, CPU is significantly cheaper. But, it has a smaller /tmp local ssd (half the size) which can be annoying. 
     - Find the `# global settings section` with the line `conda activate {ENVIRONMENT}`, and enter the name of your virtual environment for this workflow. Also change the whole command if you are using a different package manager of course. This part will be hard-coded once we make this workflow into a package with a pre-configured environment in the `.toml` file.
 
 - Open a new terminal, start a `tmux` session, then activate your virtual environment. (It's important to do this before ssh'ing into a node because we want the `tmux` session to persist regardless of the job's runtime). Run `cd viz-workflow/slurm` then `sbatch BEST-v2_gpu_ray.slurm` to launch the job on the number of nodes you specified within that file. At this point, credits are being charged to the allocation. The terminal will print something along the lines of "Submitted batch job #######", a unique ID for that job. This script writes the file `nodes_array.txt` that identifies the active nodes used in later scripts.
@@ -93,6 +96,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 -  In a separate terminal, while ssh'ed into the node you want to monitor (any of the nodes running the job), and with your python virtual environment activated, run `glances` to track memory usage and such as the script runs. This helps troubleshoot things like memory leaks. You can determine if issues are related to the network connection and `iowait`, or the code itself.
     - CPU usage should be around 80-100% for optimal performance, but it has fluctuated around 40% before, indicating a bottleneck. This could be the result of other users heavily utilizing the cluster you're working on, which slows down your processing but is out of your control if that is the reason.
       - Note from Robyn: Is this true? I thought we have the slurm script set up to reserve entire nodes to ourselves? But maybe other users can impact the network speed, i.e. reading and writing files.
+      - Kastan: Robyn is exactly correct. I think the network speed (reading from /scratch) flucuates a lot. 
 
 -  Once staging is complete, open `viz-workflow/utilities/rsync_staging_to_scratch.py` and change the variable `output_subdir` so it matches that variable in `PRODUCTION_IWP_CONFIG.py`. Run `python viz-workflow/utilities/rsync_staging_to_scratch.py`.
     - In order to know when this step is done, check the size of the destination directory until it stops changing. A to-do is to find a better way to monitor this process with `rsync`.
@@ -109,24 +113,24 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100, cmd_line_args = args)` (skipping 3d-tiling). Then open the config and change the staging path from `/tmp` to the `/scratch` dir where all the staged files were moved to and merged.
     - **To ask Kastan: After discussing the `cmd_line_args` parameter in `step2_raster_highest()` with Robyn, she suggested to adjust the code [here](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/f6cafa1132eed42ecad0ee0f569d69ae751d2bd1/IN_PROGRESS_VIZ_WORKFLOW.py#L378) in my new branch to simplify it. (removed the `if i >= int(args.start_index) and i < int(args.end_index):` part) Robyn also noted that the `cmd_line_args` parameter might not be necessary at all anymore with the memory leak fixed. Do you agree? The start and end indexes will always be the first and last batch, because we probably won't need to pick up where we left off without a memory leak.**
     - Note from Robyn in regard to `args` parameter: I think we might have to pass some args that are not documented to the script for this step. This was a temporary measure added by Kastan to re-start the geotiff creation when it failed from a memory leak. I think we should remove this requirement, make it optional, or at least document what these required arguments are.  
+    - Kastan: Let's totally remove the args. It was a temporary workaround for the memory leak in `step2_raster_highest(batch_size=100, cmd_line_args = args) # rasterize highest Z level only`.
 
 - Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
     - You know this step is complete when the destination directory size stops growing, and the final print statement is generated: 'Done rasterize all only highest z level'
 
 - Transfer all geotiff files from `/tmp` to `/scratch` with `rsync_merge_raster_to_scratch.py`, but before running this script, open it to update the variable `output_dir` to the correct string.
     - **To ask Kastan: Rasterization is also executed on multiple nodes, but we do not merge the outputs of each node within the script `rsync_merge_raster_to_scratch.py`, so is it correct we do not need to consolidate these files? Is there a reason 'merge' is in the name of the script?**  
+        - This script _does_ "merge" the rasterization outputs, in the sense that it moves all of them to the same output directory, following the Z-level Tile Hierarchy format. So the idividual files do not need to be merged, but all of them need to exist in the same tile hierarchy on disk, on /scratch.
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step2_raster_highest(batch_size=100, cmd_line_args = args)`, and uncomment out the next step: `step3_raster_lower(batch_size_geotiffs=100)`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`. Once complete, change hard-coded paths in `utilities/rsync_merge_raster_to_scratch.py`, and run it.
-    - Note from Robyn in regard to `args` parameter: I think we might have to pass some args that are not documented to the script for this step. This was a temporary measure added by Kastan to re-start the geotiff creation when it failed from a memory leak. I think we should remove this requirement, make it optional, or at least document what these required arguments are.
 
 -  Return to the file and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)`
     - These files are written directly to `/scratch` so no need to transfer from `/tmp`.
     - **To ask Kastan: Why do only the webtiles get written directly to scratch?**
+        - No particular reason. That's how I originally implemented all of these steps, and I never got around to optimizing this one. It might be fast enough as is. If you find that it's too slow, we could implement the same /tmp + rsync optimization. 
 
 -  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job, so no more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
 - Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub. Move data off Delta before March or work with Delta team to ensure data won't be wiped.
-
-
 
 
