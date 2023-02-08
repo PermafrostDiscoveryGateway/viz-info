@@ -18,7 +18,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - When the `ray` workflow and `parsl` workflows are finalized and designed as `poetry` packages, this manual creation of an environment won't be necessary because the `.toml` file will be present.
 
 - Prepare one of the two `slurm` scripts to claim some worker nodes on which we will launch a job. By default, you are logged into the head node (login01, 02, or 03) which should __not__ be the node that executes the bulk of the computation (you actually cannot be charged money for this node). Run `squeue | grep {USERNAME}` (a `slurm` command) to display info about the jobs in the scheduling queue and which nodes each are running on. This list will be empty of you haven't launched any jobs yet. **Important note:** do not type in your _full_ username, just the first half or so, because the query will not work if your username is too long. For example, for the username 'julietcohen', enter `squeue | grep juliet` to see all jobs.
-- Open the appropriate script that will soon be run to claim the nodes: either `viz-workflow/slurm/BEST-v2_gpu_ray.slurm` if you're using GPU, or `BEST_cpu_ray_double_srun.slurm` for CPU. (Rename this soon for clarity) **Note:** lines at the top of this `slurm` script that start with `#SBATCH` are __not__ regular comments, they are settings. Other lines in the script that start with just `#` are regular comments. 
+    - Open the appropriate script that will soon be run to claim the nodes: either `viz-workflow/slurm/BEST-v2_gpu_ray.slurm` if you're using GPU, or `BEST_cpu_ray_double_srun.slurm` for CPU. (Rename this soon for clarity) **Note:** lines at the top of this `slurm` script that start with `#SBATCH` are __not__ regular comments, they are settings. Other lines in the script that start with just `#` are regular comments. 
     - Look at the line `#SBATCH --nodes={NUMBER}` which represents the number of nodes that will process the IWP data. Change this if desired. 5 is a good number with sufficient CPU usage, but for the individual job for geotiff creation, Robyn used 10 because CPU usage was inefficient. 
         - We are not sure how much increasing the nodes decreases the execution time, Robyn only got through 95% of the staged files with 10 nodes. Because of this efficiency uncertainty, it is important to set up a special `rsync` script _before running the geotiff creation step_  that will continuously check for new geotiff files in the `/tmp` folder and sync them to `/scratch` _without needing to manually run an `rsync` script at intervals_. 
     - **To ask Kastan: any tips for increasing CPU usage?**
@@ -109,6 +109,8 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100)` (skipping 3d-tiling). Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` in a `tmux` session with the virtual enviornment activated and ssh'd into a node, as usual.
     - You know this step is complete when the destination directory size in `/tmp` stops growing, and the summary of the step is printed.
+
+- Check that the new config was written by the raster-highest step.
 
 - Transfer all highest z-level geotiff files from `/tmp` to `/scratch` by running `python viz-workflow/rsync_step2_raster_highest_to_scratch.py`.
 
