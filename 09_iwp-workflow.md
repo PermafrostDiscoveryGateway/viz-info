@@ -36,12 +36,14 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - When there is no issue starting the job (there is nothing noted in parenthesis), there will be a node code such as `gpub059` if you're using GPU, or `cn059` if you're using CPU. You'll need that to ssh into that specific node. If the number of nodes specified in the `slurm` script is greater than 1 (likely the case!), then the code will show a __range__ of numbers for that one job, such as `gpub[059-060]` or `cn[059-060]`. The smallest number in this range is the "head node" for that job, meaning that is the number you will want to ssh into.
     - The current runtime for each job is also noted in this output, which helps you track how much time you have left to finish your job.
 
+- Check that each node has activated the same environment by running `which python` in each node. It should return the Python subdirectory your environment's folder! The `slurm` job will not run on the nodes that don't have the environment successfully activated.
+
 - Sync the most recent footprints from `/scratch` to all relevant nodes' `/tmp` dirs on Delta: 
     - Since Juliet is running this workflow, this script copies footprints from her `/scratch` dir to the `/tmp` dirs on the nodes.
     - Good practice to first check the size of the footprint source directory, so you know how large the destiantion directory should be when it's done.
     - Within a `tmux` session, switch into the correct environment, and ssh into the head node (e.g. `ssh gpub059`) and run `python viz-workflow/rsync_footprints_to_nodes.py`.
     
-    Overall, running this script is necessary to do before each job because at the end of the last job, the `/tmp` dirs on the active nodes are wiped. We do not just pull directly from the `/scratch` dir because the workflow runs much slower that way (a very low % CPU usage) since the `/scratch` dir is not directly on each node like the `/tmp` dirs are, and because the footprint files are very small and very numerous. Similarly, when we write files we do so to the `/tmp` dir then `rsync` them back to `/scratch` after to save time. One of our to-do's is to automate this step.
+    Overall, running this script is necessary to do before each job because at the end of the last job, the `/tmp` dirs on the active nodes are wiped. We do not just pull directly from the `/scratch` dir for every step because the workflow runs much slower that way (a very low % CPU usage) since the `/scratch` dir is not directly on each node like the `/tmp` dirs are, and because the footprint files are very small and very numerous. Similarly, when we write files we do so to the `/tmp` dir then `rsync` them back to `/scratch` after to save time. One of our to-do's is to automate this step.
 
 - Continue to check the size of the footprints dir within `/tmp` in a separate terminal:
     - To see the footprints that you are syncing to the `/tmp` dir of a node, open a new terminal and ssh into any of the active nodes. Then run `cd /tmp` & don't forget the prefix slash.
@@ -110,17 +112,22 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100)` (skipping 3d-tiling). Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` in a `tmux` session with the virtual enviornment activated and ssh'd into a node, as usual.
     - You know this step is complete when the destination directory size in `/tmp` stops growing, and the summary of the step is printed.
 
-- Check that the new config was written by the raster-highest step.
-
 - Transfer all highest z-level geotiff files from `/tmp` to `/scratch` by running `python viz-workflow/rsync_step2_raster_highest_to_scratch.py`.
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step2_raster_highest(batch_size=100)`, and uncomment out the next step: `step3_raster_lower(batch_size_geotiffs=100)`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
 
 - Once complete, run `python rsync_merge_raster_to_scratch.py`. This script both merges the the raster higer and raster lower outputs in the sense that it moves them all to the same directory, followng the z-level tile hierarchy format. The individual files do not need to be merged, but they need to exist within the same tile hierarchy on disk, within `/scratch`.
 
--  Return to the file and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)`
-    - Check that a new config file has been written by the rasterization step. This is important for the color scale in the web tiles to make sense. 
-    - These files are written directly to `/scratch` so no need to transfer from `/tmp` afterwards.
+- Check that the file `rasters_summary.csv` was written to `/scratch`. It is necessary in order to use it to update ranges in the web tiling step so the color scale in the web tiles to make sense.
+
+- Using a few simple bash commands, copy the file hierarchy in the `geotiff` directory in `/scratch` to a new directory called `web_tiles`. This is necessary because the web tiling step writes directly to `/scratch` rather than `/tmp` first, and recursive directories cannot be created in `/scratch` while writing files there. Replace the variables in {} appropriately.
+    1. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
+    2. `find . -type d > /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+    3. `mkdir /scratch/bbou/{user}/{output_subdir}/web_tiles`
+    4. `cd /scratch/bbou/{user}/{output_subdir}/web_tiles`
+    4. `xargs mkdir -p < /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+
+-  Return to `IN_PROGRESS_VIZ_WORKFLOW.py` and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)` 
     - Pay attention to how long this step takes. If it is slow, switch to writing the files to `/tmp` before transferring to scratch, like staging and rasterization.
 
 -  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job, so no more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
