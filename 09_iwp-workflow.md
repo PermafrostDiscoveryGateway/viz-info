@@ -8,7 +8,9 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 -  Pull updates from [`PermafrostDiscoveryGateway/viz-workflow`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) to your local repo and switch into the `ray_workflow_juliet` branch.
 
-- Pull updates from the 3 PDG packages ([`viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging), [`viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster/tree/main), [`viz-3dtiles`](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles)) and ensure you're in the main branch of each.
+- ~~Pull updates from the 3 PDG packages ([`viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging), [`viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster/tree/main), [`viz-3dtiles`](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles)) and ensure you're in the main branch of each.~~
+
+- Pull updates from the 3 PDG packages ([`viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging), [`viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster/tree/main), [`viz-3dtiles`](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles)) and ensure you're in the main branch of `viz-staging` and `viz-3dtiles`, but switch into branch XXX of `viz-raster` (this is temporary - we use this branch just to get around an error in the creation of id object in `viz-raster` when it is run with ray in parallel).
 
 - Create a virtual environment (recommended for root of env to be in `/scratch/username`) with `python=3.9` and install __local__ versions of the 3 PDG packages (using `pip install -e {LOCAL PACKAGE}`). Within `setup.py` for `viz-raster`, remember to comment out the GitHub install of `viz-staging` to ensure the local version is installed. Also install the packages:
     - `ray`
@@ -107,7 +109,16 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
       - Change the last string part of `merged_dir_path` (where merged staged files will live) to the lowest number node of the nodes you're using. 
       - Remove this node from the `staged_dir_paths_list`
     - Within a `tmux` session, with your virtual environment activated, and ssh's into a node, run `python viz-workflow/merge_staged_vector_tiles.py` to consolidate all staged files to the node you specified. This script first defines the function `merge_all_staged_dirs()`, then executes it.
-    - You know when this is complete by looking for the last print statement: 'Done, exiting...'. Check the size of the staged directories in `/scratch`. The head node's directory size should be much larger than all other nodes' directories, because all the nodes' staged files have been consolidated there. 
+    - You know when this is complete by looking for the last print statement: 'Done, exiting...'. Check the size of the staged directories in `/scratch`. The head node's directory size should be much larger than all other nodes' directories, because all the nodes' staged files have been consolidated there.
+
+- Pre-populate your `/scratch` with a `geotiff` dir with the internal file hierarchy so that we can get around the error in creating the id object in `viz-raster`.
+    - Replace the variables in {} appropriately.
+        1. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
+        2. `find . -type d > /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+        3. `mkdir /scratch/bbou/{user}/{output_subdir}/web_tiles`
+        4. `cd /scratch/bbou/{user}/{output_subdir}/web_tiles`
+        5. `xargs mkdir -p < /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100)` (skipping 3d-tiling). Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` in a `tmux` session with the virtual enviornment activated and ssh'd into a node, as usual.
     - You know this step is complete when the destination directory size in `/tmp` stops growing, and the summary of the step is printed.
@@ -116,19 +127,13 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step2_raster_highest(batch_size=100)`, and uncomment out the next step: `step3_raster_lower(batch_size_geotiffs=100)`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
 
-- Once complete, run `python rsync_merge_raster_to_scratch.py`. This script both merges the the raster higer and raster lower outputs in the sense that it moves them all to the same directory, followng the z-level tile hierarchy format. The individual files do not need to be merged, but they need to exist within the same tile hierarchy on disk, within `/scratch`.
+- ~~Once complete, run `python rsync_merge_raster_to_scratch.py`. This script both merges the the raster higer and raster lower outputs in the sense that it moves them all to the same directory, followng the z-level tile hierarchy format. The individual files do not need to be merged, but they need to exist within the same tile hierarchy on disk, within `/scratch`.~~ Note: no longer necessary because we write lower geotiffs directly to `/scratch`.
 
 - Check that the file `rasters_summary.csv` was written to `/scratch`. It is necessary in order to use it to update ranges in the web tiling step so the color scale in the web tiles to make sense.
 
-- Using a few simple bash commands, copy the file hierarchy in the `geotiff` directory in `/scratch` to a new directory called `web_tiles`. This is necessary because the web tiling step writes directly to `/scratch` rather than `/tmp` first, and recursive directories cannot be created in `/scratch` while writing files there. Replace the variables in {} appropriately.
-    1. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
-    2. `find . -type d > /scratch/bbou/{user}/{output_subdir}/dirs.txt`
-    3. `mkdir /scratch/bbou/{user}/{output_subdir}/web_tiles`
-    4. `cd /scratch/bbou/{user}/{output_subdir}/web_tiles`
-    4. `xargs mkdir -p < /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+- Create a new directory called `web_tiles` in your `/scratch` dir. This is necessary because the web tiling step writes directly to `/scratch` rather than `/tmp` first, and directories cannot be created in `/scratch` while writing files there. But subdirectories will be created as needed within the `web_tiles` dir because `viz-staging` is configured that way.
 
 -  Return to `IN_PROGRESS_VIZ_WORKFLOW.py` and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)` 
-    - Pay attention to how long this step takes. If it is slow, switch to writing the files to `/tmp` before transferring to scratch, like staging and rasterization.
 
 -  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job, so no more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
