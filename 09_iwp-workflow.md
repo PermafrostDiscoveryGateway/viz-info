@@ -111,14 +111,13 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - Within a `tmux` session, with your virtual environment activated, and ssh's into a node, run `python viz-workflow/merge_staged_vector_tiles.py` to consolidate all staged files to the node you specified. This script first defines the function `merge_all_staged_dirs()`, then executes it.
     - You know when this is complete by looking for the last print statement: 'Done, exiting...'. Check the size of the staged directories in `/scratch`. The head node's directory size should be much larger than all other nodes' directories, because all the nodes' staged files have been consolidated there.
 
-- Pre-populate your `/scratch` with a `geotiff` dir with the internal file hierarchy so that we can get around the error in creating the id object in `viz-raster`.
+- Pre-populate your `/scratch` with a `geotiff` dir with the merged staged internal file hierarchy so that we can get around the error in creating the `id` object in `viz-raster`.
     - Replace the variables in {} appropriately.
-        1. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
+        1. `cd /scratch/bbou/{user}/{output_subdir}/staged/{head_node}`
         2. `find . -type d > /scratch/bbou/{user}/{output_subdir}/dirs.txt`
-        3. `mkdir /scratch/bbou/{user}/{output_subdir}/web_tiles`
-        4. `cd /scratch/bbou/{user}/{output_subdir}/web_tiles`
+        3. `mkdir /scratch/bbou/{user}/{output_subdir}/geotiff`
+        4. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
         5. `xargs mkdir -p < /scratch/bbou/{user}/{output_subdir}/dirs.txt`
-
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100)` (skipping 3d-tiling). Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` in a `tmux` session with the virtual enviornment activated and ssh'd into a node, as usual.
     - You know this step is complete when the destination directory size in `/tmp` stops growing, and the summary of the step is printed.
@@ -129,14 +128,36 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 - ~~Once complete, run `python rsync_merge_raster_to_scratch.py`. This script both merges the the raster higer and raster lower outputs in the sense that it moves them all to the same directory, followng the z-level tile hierarchy format. The individual files do not need to be merged, but they need to exist within the same tile hierarchy on disk, within `/scratch`.~~ Note: no longer necessary because we write lower geotiffs directly to `/scratch`.
 
-- Check that the file `rasters_summary.csv` was written to `/scratch`. It is necessary in order to use it to update ranges in the web tiling step so the color scale in the web tiles to make sense.
+- Check that the file `rasters_summary.csv` was written to `/scratch`. Download this file locally. Usually the top few lines look oddly fomatted. Delete these few lines and re-upload the file to the same directory (overwriting the misformatted one there). This is necessary in order to use it to update ranges in the web tiling step so the color scale in the web tiles to make sense.
 
 - Create a new directory called `web_tiles` in your `/scratch` dir. This is necessary because the web tiling step writes directly to `/scratch` rather than `/tmp` first, and directories cannot be created in `/scratch` while writing files there. But subdirectories will be created as needed within the `web_tiles` dir because `viz-staging` is configured that way.
 
--  Return to `IN_PROGRESS_VIZ_WORKFLOW.py` and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)` 
+-  Return to `IN_PROGRESS_VIZ_WORKFLOW.py` and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)`. Run Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`. These tiles are written directly to `/scratch` so as soon as this step is complete, you can end the job. 
 
--  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. This closes all terminals related to that job, so no more credits are being used. This should be executed after all files are generated and moved off the node (from `/tmp` to the user's dir). Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
+-  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. No more credits are being used. Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
-- Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub. Move data off Delta before March or work with Delta team to ensure data won't be wiped.
+- Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
+
+- Move data off Delta before March or work with Delta team to ensure data won't be wiped.
+
+# Transfering Web Tiles for Visualization
+
+## Steps:
+
+- Use `globus` or `rsync` to transfer the web tiles from Delta's `/scratch` dir to Datateam. `rsync` is easier because while `globus` has a friendly web interface, it sometimes does not register an Arctic Data Center login correctly. 
+
+- The tiles should have their own directory within: `datateam:/home/pdg/data/ice-wedge-polygon-data/version_01/tiles`. Nick will be able to help make a unqiue folder there.
+
+- Within a `tmux` session on Delta, run an `rsync` command like the following:
+
+`rsync -avzh /scratch/bbou/julietcohen/IWP/output/iwp_2023_02_27/web_tiles/iwp_coverage jcohen@datateam.nceas.ucsb.edu:/home/pdg/data/ice-wedge-polygon-data/version_01/tiles/webtiles_coverage_2023_02_27`
+
+(Replace the username and the last directory appropriately. You will be prompted to enter your password)
+
+- `rsync` will print the web tile filepaths in quick succession as it transfers them so you can keep track of the progress. It may take many minutes. It will stop outputting to the terminal when it's done! 
+
+- Navigate to the Rmd document to update the portal. (adding more details to this soon!) Run through the code to download the latest version of the portal (paying attention to staging or production). We want to do demo first so we make sure it looks good before putting it on production. Once the xml file has been written locally, open it and edit the filepath for the IWP data to point to the folder just populated with the new data. Save the file. Update the portal using the appropriate function!
+
+Congratulations! You're done.
 
 
