@@ -141,6 +141,46 @@ The above file path needs to be adjusted to reflect the web tiles you want to vi
 
 10. To kill the local host, close the terminal window or use `ctrl` + `c`
 
+### Small Datasets
+
+If you are working with a small dataset or a subset of a large dataset for testing and you are having trouble finding the tiles you visualized because there just isn't very many of them, you can use the morecantile library and add a few more lines of code to `cesium.js` to fix your problem:
+
+- In Python, run the following code to generate the bounding box coordinates for one of the web tiles (it can be any one!):
+
+```
+import morecantile
+
+tms = morecantile.tms.get("WGS1984Quad")
+tms.bounds(morecantile.Tile(x = {value}, y = {value}, z = {value}))
+```
+
+- The output will look something like this:
+
+`BoundingBox(left=-177.47314453125, bottom=71.20788574218751, right=-177.4676513671875, top=71.21337890625001)`
+
+- Modify `cesium.js` by adding 2 lines of code that define the `"rectangle"` and apply the `zoomTo()` function:
+
+```
+Cesium.Ion.defaultAccessToken = "YOUR TOKEN HERE"; // <- update this
+
+const viewer = new Cesium.Viewer('cesiumContainer');
+
+const imageryLayers = viewer.imageryLayers;
+
+const myNewProvider = new Cesium.WebMapTileServiceImageryProvider({
+  "url": "https://demo.arcticdata.io/cesium-layers/raster-imagery/bartsch_infrastructure/WorldCRS84Quad/{TileMatrix}/{TileCol}/{TileRow}.png",
+  "tilingScheme": new Cesium.GeographicTilingScheme(),
+  "rectangle": Cesium.Rectangle.fromDegrees(-177.47314453125, 71.20788574218751, -177.4676513671875, 71.21337890625001)
+})
+const myNewLayer = new Cesium.ImageryLayer(myNewProvider)
+imageryLayers.add(myNewLayer)
+viewer.zoomTo(myNewLayer);
+```
+
+Save the file and refresh the browser. The window should automatically zoom to the tile you specified!
+
+
+
 ## Option 2: Test in cesium sandcastle
 
 - Cesium sandcastle is a free online sandbox for testing things in Cesium.
