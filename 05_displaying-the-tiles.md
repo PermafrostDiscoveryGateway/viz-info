@@ -177,7 +177,7 @@ imageryLayers.add(myNewLayer)
 viewer.zoomTo(myNewLayer);
 ```
 
-Save the file and refresh the browser. The window should automatically zoom to the tile you specified!
+Save the file and refresh the browser. The window should automatically zoom to the tile you specified! However, it is also _only visualizing that one tile_, so take note of where it zoomed to, then remove those `"rectangle"` and apply the `zoomTo()` lines from `cesium.js`, then refresh and manually zoom to that point to see all the tiles. Done!
 
 
 
