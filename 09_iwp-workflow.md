@@ -6,7 +6,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
 - ssh into the Delta server in VScode.
 
--  Pull updates from the `main` branche for each of the 4 PDG repositories:
+-  Pull updates from the `main` branch for each of the 4 PDG repositories:
     - [`PermafrostDiscoveryGateway/viz-workflow`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main)
     - [`PermafrostDiscoveryGateway/viz-staging`](https://github.com/PermafrostDiscoveryGateway/viz-staging)
     - [`PermafrostDiscoveryGateway/viz-raster`](https://github.com/PermafrostDiscoveryGateway/viz-raster)
@@ -142,9 +142,12 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - This is necessary because the web tiling step writes directly to `/scratch` rather than `/tmp` first, and directories cannot be created in `/scratch` while writing files there. But subdirectories will be created as needed within the `web_tiles` dir because `viz-staging` is configured that way.
 
 -  Return to `IN_PROGRESS_VIZ_WORKFLOW.py` and comment out the last step: `step4_webtiles(batch_size_web_tiles=250)`. Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py`.
-    - These tiles are written directly to `/scratch` so as soon as this step is complete, you can end the job. 
+    - These tiles are written directly to `/scratch`
 
--  To purposefully cancel a job, run `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. No more credits are being used. Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
+- Transfer the `log.log` in each nodes' `/tmp` dir to that respective nodes' subdir within `staging` dir: run `python viz-workflow/rsync_log_to_scratch.py`
+    - The logs are transferred to their respective nodes' dir instead of being named after their node, because all logs need to be named the same thing so all logs receive all statemnts from the PDG packages throughout processing.
+
+- Cancel the job: `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. No more credits are being used. Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
 - Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
 
