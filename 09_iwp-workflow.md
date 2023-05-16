@@ -118,6 +118,10 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - Within a `tmux` session, with your virtual environment activated, and ssh'd into the head node, run `python viz-workflow/merge_staged_vector_tiles.py` to consolidate all staged files to the node you specified.
     - You know when this is complete by looking for the last print statement: 'Done, exiting...'. Check the size of the staged directories in `/scratch`. The head node's directory size should be much larger than all other nodes' directories, because all the nodes' staged files have been consolidated there.
 
+- Once the merge is complete, transfer the `log.log` in each nodes' `/tmp` dir to that respective nodes' subdir within `staging` dir: run `python viz-workflow/rsync_log_to_scratch.py`
+    - The logs are transferred to their respective nodes' dir instead of being named after their node, because all logs need to be named the same thing so all logs receive all statements from the PDG packages throughout processing.
+    - This only needs to be done immeditely after merging if you are concluding the job before moving onto the raster higher step with a fresh job (which would be the case if there is not enough time left in the current job to execute raster highest before the 24 hours is up).
+
 - Pre-populate your `/scratch` with a `geotiff` dir with the merged staged internal file hierarchy.
     - Replace the variables in {} appropriately.
         1. `cd /scratch/bbou/{user}/{output_subdir}/staged/{head_node}`
@@ -144,7 +148,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - These tiles are written directly to `/scratch`
 
 - Transfer the `log.log` in each nodes' `/tmp` dir to that respective nodes' subdir within `staging` dir: run `python viz-workflow/rsync_log_to_scratch.py`
-    - The logs are transferred to their respective nodes' dir instead of being named after their node, because all logs need to be named the same thing so all logs receive all statemnts from the PDG packages throughout processing.
+    - If you are in the same job as when you started the first staging step, this is will be the only time you transfer the logs. If you already did this in a previos job that just executed the staging step, you will have to pay attention to the directories that these logs are transferred to. Make sure they exist in `/scratch` before you run the script.
 
 - Cancel the job: `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. No more credits are being used. Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
