@@ -28,10 +28,8 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - **Change the line `#SBATCH --nodes={NUMBER}`** which represents the number of nodes that will process the IWP data.
         - For the IWP workflow run in May 2023, 20 nodes were used to stage 17,039 input shapefiles. This was to avoid out-of-memory errors, and to process the data within 24 hours (increasing the number of nodes decreases the execution time). The data processing finished with just a few minutes to spare, so make sure you allocate enough nodes. Rsyncing the files took about an hour and the first rsync was initiated when just 80% of the tiles were complete, in order to ensure that at least that many files were stored safely off `/tmp`. Subsequent `rsync` runs were faster as there were fewer files to write or re-write. 
         - In a past run, Robyn rasterized 95% of the staged tiles with 10 nodes.
-        - A future to-do is to set up a special `rsync` script that will continuously check for new geotiff files in the `/tmp` folder and sync them to `/scratch` _without needing to manually run an `rsync` script at intervals_. 
-    - **To ask Kastan: any tips for increasing CPU usage?**
-        - It's a hard problem. It usually means there's a networking bottleneck from `/scratch`, i.e. pulling data (including footprints) from `/scratch`. The "easiest" workaround is to copy data to each node's `/tmp` directory. But there's not that much space on `/tmp` (750G on CPU nodes, and 1.5T on GPU nodes) so it can pretty easily fill up.  
-    - **Change the line `#SBATCH --time=24:00:00`** which represents the total amount of time a job is allowed to run (and charge credits based on minutes and cores) before it is cancelled. The full 24 hours should be set if doing a full IWP run. If doing a test run, decrease this.
+        - A future to-do is to set up a special `rsync` script that will continuously check for new geotiff files in the `/tmp` folder and sync them to `/scratch` _without needing to manually run an `rsync` script at intervals_.   
+    - **Change the line `#SBATCH --time=48:00:00`** which represents the total amount of time a job is allowed to run (and charge credits based on minutes and cores) before it is cancelled. The full 48 hours should be set if doing a full IWP run. If doing a test run, decrease this.
         - To calculate the number of CPU hours that will be charged: multiply the amount of _cores_ in each node (128 CPU cores per node) by the number of nodes and hours. So if you're using 2 nodes for 3 hours and CPU cores, you multiply 128 cores x 3 hours x 2 nodes = ~768 CPU hours will be charged.
         - To calulate the number of GPU hours that will be charged: multiply the number of nodes by the number of minutes by 0.05. 
     - **Change the line `#SBATCH --account={ACCOUNT NAME}`** and enter the account name for the appropriate allocation. Note that our allocations come with GPU and CPU counterparts that are billed separately. Use CPU when ample hours are available. CPU has smaller `/tmp` local SSD (about half as much as GPU `/tmp`) which is a downside. If we need more space on `/tmp` than normal or are running low on compute hours, use GPU. Note that we do __not__ store these private account names on GitHub, so pay attention to this line when you are pushing. 
@@ -106,9 +104,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - The script takes a few seconds to start (the terminal looks like it's hanging), then rapidly prints statements throughout the entire process, so when that stops and there is a summary of the staging in the last print statement, you know the step is complete. You can also monitor CPU usage on glances and see that it has returned to a very low % again (like 0.2%).
 
 -  In a separate terminal, while ssh'ed into any of the nodes running the job, and with your virtual environment activated, run `glances` to track memory usage and such as the script runs. This helps troubleshoot things like memory leaks. You can determine if issues are related to the network connection and `iowait`, or the code itself.
-    - If using CPU script: CPU usage should be around 80-100% for optimal performance, but it has fluctuated around 40% before, indicating a bottleneck. This could be the result of other users heavily utilizing the cluster you're working on, which slows down your processing but is out of your control if that is the reason.
-      - Note from Robyn: Is this true? I thought we have the slurm script set up to reserve entire nodes to ourselves? But maybe other users can impact the network speed, i.e. reading and writing files.
-      - Note from Kastan: Robyn is exactly correct. I think the network speed (reading from /scratch) flucuates a lot.
+    - If using CPU script: CPU usage should be around 80-100% for optimal performance, but it has fluctuated around 40% before, indicating a bottleneck. This could be the result of other users reading and writing to `/scratch, which slows down your netowrk speed but is out of your control.
     - If using GPU script: In May 2023 during staging with 20 nodes and 17,039 input files, memory % increased to ~55% within the fist 16 hours of the run, then stabilized and did not fluctuate the rest of the run.
 
 -  Once staging is complete, run `python viz-workflow/rsync_staging_to_scratch.py`.
@@ -120,10 +116,11 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
       - Change the hard-coded nodes specified in `staged_dir_paths_list` to the list of nodes you're using for this job, except **do not include the head node in this list** because it was already assigned to `merged_dir_path`.
     - Within a `tmux` session, with your virtual environment activated, and ssh'd into the head node, run `python viz-workflow/merge_staged_vector_tiles.py` to consolidate all staged files to the node you specified.
     - You know when this is complete by looking for the last print statement: 'Done, exiting...'. Check the size of the staged directories in `/scratch`. The head node's directory size should be much larger than all other nodes' directories, because all the nodes' staged files have been consolidated there.
+    - When merging a few TB of data, the merging step slows down after several hours. It may be necessary to execute multiple merging jobs, being careful to never merge the same workser node into the head node in 2 different jobs.
 
 - Once the merge is complete, transfer the `log.log` in each nodes' `/tmp` dir to that respective nodes' subdir within `staging` dir: run `python viz-workflow/rsync_log_to_scratch.py`
     - The logs are transferred to their respective nodes' dir instead of being named after their node, because all logs need to be named the same thing so all logs receive all statements from the PDG packages throughout processing.
-    - This only needs to be done immeditely after merging if you are concluding the job before moving onto the raster higher step with a fresh job (which would be the case if there is not enough time left in the current job to execute raster highest before the 24 hours is up).
+    - This only needs to be done immeditely after merging if you are concluding the job before moving onto the raster higher step with a fresh job (which would be the case if there is not enough time left in the current job to execute raster highest before the 48 hours are up).
 
 - Pre-populate your `/scratch` with a `geotiff` dir with the merged staged internal file hierarchy.
     - Replace the variables in {} appropriately.
@@ -151,13 +148,13 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - These tiles are written directly to `/scratch`
 
 - Transfer the `log.log` in each nodes' `/tmp` dir to that respective nodes' subdir within `staging` dir: run `python viz-workflow/rsync_log_to_scratch.py`
-    - If you are in the same job as when you started the first staging step, this is will be the only time you transfer the logs. If you already did this in a previos job that just executed the staging step, you will have to pay attention to the directories that these logs are transferred to. Make sure they exist in `/scratch` before you run the script.
+    - If you are in the same job as when you started the first staging step, this is will be the only time you transfer the logs. If you already did this in a previous job that just executed the staging step, you will have to pay attention to the directories that these logs are transferred to. Make sure they exist in `/scratch` before you run the script.
 
 - Cancel the job: `scancel {JOB ID}`. The job ID can be found on the left column of the output from `squeue | grep {USERNAME}`. No more credits are being used. Recall that the job will automatically be cancelled after 24 hours even if this command is not run.
 
 - Remember to remove the `{ACCOUNT NAME}` for the allocation in the slurm script before pushing to GitHub.
 
-- Move output data from Delta to the Arctic Data Center as soon as possible.
+- Move output data from Delta to the Arctic Data Center as soon as possible via Globus.
 
 # Transfering Output Data for Archival and Visualization
 
