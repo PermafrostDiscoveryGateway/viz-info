@@ -46,8 +46,8 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 -  Run `squeue | grep {USERNAME}` to see the new job that has appeared at the top of the list.
     - Check here for clues in parenthesis to troubleshoot an error in starting a job.
         - `(Priority)` means that your job is queued but all of Delta's nodes are being used by others at the moment. Continue checking if your job starts every few minutes by running the `squeue` command.
-        - `(Resources)` means you do not have enough credits to complete the job you requested. Cancel it (`scancel {JOB ID}`), change the resources you are requesting, and run the `sbatch` command again.
-        - `QOSGrpBillingMinutes` means you tried to charge too many hours to your allcoation, similar to (`Resources`). Cancel it (`scancel {JOB ID}`), change the resources you are requesting, and run the `sbatch` command again.
+        - `(Resources)` means the same as `(Priority)`.
+        - `QOSGrpBillingMinutes` means you tried to charge too many resources to your allcoation, similar to (`Resources`). Cancel it (`scancel {JOB ID}`), reduce the amount of hours or nodes you're requesting, and run the `sbatch` command again.
     - When there is no issue starting the job, there will be a node code such as `gpub059` if you're using GPU, or `cn059` if you're using CPU. You'll need that to ssh into that specific node. If the number of nodes specified in the `slurm` script is greater than 1 (likely the case!), then the code will show a __range__ of numbers for that one job, such as `gpub[059-060]` or `cn[059-060]`. The smallest number in this range is the "head node" for that job, meaning that is the number you will want to ssh into in your `tmux` terminal.
     - The current runtime for each job is also noted in this output, which helps you track how much time you have left to finish your job.
 
