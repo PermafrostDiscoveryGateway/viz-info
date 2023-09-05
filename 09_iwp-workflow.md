@@ -122,13 +122,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - The logs are transferred to their respective nodes' dir instead of being named after their node, because all logs need to be named the same thing so all logs receive all statements from the PDG packages throughout processing.
     - This only needs to be done immeditely after merging if you are concluding the job before moving onto the raster higher step with a fresh job (which would be the case if there is not enough time left in the current job to execute raster highest before the 48 hours are up).
 
-- Pre-populate your `/scratch` with a `geotiff` dir with the merged staged internal file hierarchy.
-    - Replace the variables in {} appropriately.
-        1. `cd /scratch/bbou/{user}/{output_subdir}/staged/{head_node}`
-        2. `find . -type d > /scratch/bbou/{user}/{output_subdir}/dirs.txt`
-        3. `mkdir /scratch/bbou/{user}/{output_subdir}/geotiff`
-        4. `cd /scratch/bbou/{user}/{output_subdir}/geotiff`
-        5. `xargs mkdir -p < /scratch/bbou/{user}/{output_subdir}/dirs.txt`
+- Create a `geotiff` dir: `mkdir /scratch/bbou/{user}/{output_subdir}/geotiff`
 
 -  Return to the file `viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` and comment out `step0_staging()`, and uncomment out the next step: `step2_raster_highest(batch_size=100)` (skipping 3d-tiling). Run `python viz-workflow/IN_PROGRESS_VIZ_WORKFLOW.py` in a `tmux` session with the virtual environment activated and ssh'd into the head node, as usual.
     - You know this step is complete when the destination directory size in `/tmp` stops growing, and the summary of the step is printed.
