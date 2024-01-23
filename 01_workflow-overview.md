@@ -36,8 +36,8 @@ a collection of tile matrices defined at different scales (z-indices)
 **OGC Two Dimensional Tile Matrix Set**
 a collection of standardized tile matrix sets, see [the docs](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html)
 
-**WorldCRS84Quad**
-the OCG 2D TMS that we have generally been using for the tiles we create because it is supported by Cesium. Defined [here](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html#64).
+**WGS1984Quad**
+the OCG 2D TMS that we have generally been using for the tiles we create because it is supported by Cesium. Defined [here](https://docs.ogc.org/is/17-083r2/17-083r2.html#65). 
 
 
 ### Cesium 3D tiles (vector data)

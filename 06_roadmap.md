@@ -5,16 +5,13 @@ Here are a few things that we still have left to do, as well as some ideas on fu
 ## Planned developments
 
 - See issues in each of the python package repos
-- Create a standardized workflow for raster data: We need to be able to tile large raster data, not just large vector data. Robyn has been doing this manually so far. You can checkout some of my examples on the datateam server (warning: some code here is a bit messy):
-	- Under the directory `/home/thiessenbock/PDG-test/exploratory/`, see the directories:
-		- `dai-2022`
-		- `webb-2022`
-		- `circumpolar_arctic_vegetation`
-- Some changes need to be made to the geopackage files for publishing. Methods are built for this in the [supplementary steps dir](https://github.com/PermafrostDiscoveryGateway/viz-staging/blob/main/supplementary_steps/archive_vector_tiles.py), but we still need to build this last step into the workflow
+- Create a standardized workflow for raster data: We need to be able to tile large raster data, not just large vector data.
+- Some changes need to be made to the geopackage files for processing and publishing. The [viz-staging issues](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues) describe some pre-processing steps to add to `viz-staging`. Also, some methods are built for geopackage processing in the [supplementary steps dir](https://github.com/PermafrostDiscoveryGateway/viz-staging/blob/main/supplementary_steps/archive_vector_tiles.py).
 
 ## Possible developments
 
-- Auto-generate some parts of the EML metadata for the input data
+- Issues in the repos for `viz-staging`, `viz-raster`, and `viz-workflow` are the highest priority.
+Auto-generate some parts of the EML metadata for the input data
 - Add testing to the python packages (e.g. using `pytest`)
 - Build a documentation website for the python packages (autogenerate from doc strings)
 	- may want to convert python doc strings to the "REst" format, the most common format. [Here is a package](https://github.com/dadadel/pyment) you can do that with.

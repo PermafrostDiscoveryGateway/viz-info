@@ -31,9 +31,9 @@ Since it was created, some of these classes were developed into the original `py
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
 
 The viz-workflow repo deals with running methods from the above packages in parallel. It has a couple of branches under active development:
-	- [`main`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) Matt started the repo with all the necessary files for a python package plus the beginnings of a workflow that uses Parsl
-	- [`parsl-workflow`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow): Robyn built on Matt's contributions by creating some Parsl app methods to take a workflow config file and run the code in parallel
-	- [`ray_workflow`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/ray_workflow): Kastan has been improving on the Parsl workflow and adapting it to use Ray instead of Parsl to run the workflow on NCSA super computers
+	- [`main`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
+	- [`parsl-workflow-breakdown`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow-breakdown) - parsl workflow, typically executed on the Datateam server hosted by the National Center for Ecological Analysis and Synthesis
+	- [`https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/docker-parsl-workflow`] - converting the workflow to use docker and kubernetes to be interoperable across different machines
 
 # Other python packages
 - Our packages rely heavily on some external packages that it would be good to become familiar with:

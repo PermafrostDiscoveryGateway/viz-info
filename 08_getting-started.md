@@ -9,5 +9,7 @@
 - [install the PDG packages from GitHub](https://stackoverflow.com/a/15268990)
 
 ## First tasks
-- Try the workflow with Ingmar's new data sample: https://github.com/PermafrostDiscoveryGateway/pdg-portal/issues/28
-- Work on either of the two current viz-staging issues: https://github.com/PermafrostDiscoveryGateway/viz-staging/issues
+
+- Work on the current [`viz-staging` issues](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues)
+  - a good first issue: https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/34
+

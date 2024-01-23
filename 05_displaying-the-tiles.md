@@ -18,7 +18,7 @@ The end goal of creating tiles is to display them in an interactive web map, whe
 	- https://arcticdata.io/catalog/projects/DBO
 	- https://search.dataone.org/portals/mosaic
 	- https://permafrost.arcticdata.io/ (the PDG portal)
-- The tiled data that is created in the pipeline can be displayed in an optional "map" page in portals. So far, the map feature is only being used for the PDG portal.
+- The tiled data that is created in the pipeline can be displayed in an optional "map" page in portals. So far, the map feature is only being used for a few projects, such as the PDG and the Defense Resiliency Platform Against Extreme Cold Weather.
 
 ### Creating & editing portals
 - Portals can be created & edited in [the portal builder](https://demo.arcticdata.io/edit/portals) in MetacatUI.
@@ -37,7 +37,7 @@ df <- query(ucsb, list(q ="label:permafrost AND (*:* NOT obsoletedBy:*)",
 (The above `query` function is doing a [solr](https://solr.apache.org/) query, you can read more about that [here](https://nceas.github.io/datateam-training/reference/solr-queries.html))
 
 ### PDG portal
-When we have tiles/layers to test or publish, we add them to either the demo or production version of the Permafrost Discovery Gateway portal .
+When we have tiles/layers to test or publish, we add them to either the demo or production version of the Permafrost Discovery Gateway portal.
 - **production version of the PDG portal**: [permafrost.arcticdata.io](https://permafrost.arcticdata.io/)
 	- This is the public version of the portal, where we publish tiles/layers that are ready to share with the world
 	- solr query for the current public version of the PDG portal doc: https://arcticdata.io/metacat/d1/mn/v2/query/solr/?q=label:permafrost%20AND%20(*:*%20AND%20NOT%20obsoletedBy:*)&fl=label,dateUploaded,id,seriesId,formatId
@@ -45,8 +45,8 @@ When we have tiles/layers to test or publish, we add them to either the demo or 
 
 - **demo version of the PDG portal**: [demo.arcticdata.io/portals/permafrost](https://demo.arcticdata.io/portals/permafrost)
 	- This is where we test tiles that we are working on
-	- **solr query** for the current demo version of the PDG portal doc: https://dev.nceas.ucsb.edu/knb/d1/mn/v2/query/solr/?q=label:permafrost%20AND%20(*:*%20AND%20NOT%20obsoletedBy:*)&fl=label,dateUploaded,id,seriesId,formatId
-	- The **XML document** that configures this portal: https://dev.nceas.ucsb.edu/knb/d1/mn/v2/object/urn%3Auuid%3Ab831ed0d-ec73-4b36-b9b0-845a87f8155a
+	- [**solr query**](https://dev.nceas.ucsb.edu/knb/d1/mn/v2/query/solr/?q=label:permafrost%20AND%20(*:*%20AND%20NOT%20obsoletedBy:*)&fl=label,dateUploaded,id,seriesId,formatId) for the current demo version of the PDG portal doc
+	- [**XML document**](https://dev.nceas.ucsb.edu/knb/d1/mn/v2/object/urn%3Auuid%3Ab831ed0d-ec73-4b36-b9b0-845a87f8155a) that configures this portal
 
 ### Configuring map layers in a portal document
 
