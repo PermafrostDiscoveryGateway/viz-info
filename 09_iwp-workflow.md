@@ -17,7 +17,6 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - `glances`
     - `pyfastcopy`
     - Changes integrated with pulls or saved manual changes will __automatically__ be implemented into that virtual environment if the local package was installed with `-e` (stands for "editable") and you are running a script from the terminal.
-    - When the `ray` workflow and `parsl` workflows are finalized and designed as `poetry` packages, this manual creation of an environment won't be necessary because the `.toml` file will be present.
 
 - Prepare one of the two `slurm` scripts to claim some worker nodes on which we will launch a job.
     - By default, you are logged into the head node (login01, 02, or 03) which should __not__ be the node that executes the bulk of the computation (you actually cannot be charged for work on this node). 
@@ -27,7 +26,6 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - **Note:** lines at the top of this `slurm` script that start with `#SBATCH` are __not__ regular comments, they are settings. Other lines in the script that start with just `#` are regular comments. 
     - **Change the line `#SBATCH --nodes={NUMBER}`** which represents the number of nodes that will process the IWP data.
         - For the IWP workflow run in May 2023, 20 nodes were used to stage 17,039 input shapefiles. This was to avoid out-of-memory errors, and to process the data within 24 hours (increasing the number of nodes decreases the execution time). The data processing finished with just a few minutes to spare, so make sure you allocate enough nodes. Rsyncing the files took about an hour and the first rsync was initiated when just 80% of the tiles were complete, in order to ensure that at least that many files were stored safely off `/tmp`. Subsequent `rsync` runs were faster as there were fewer files to write or re-write. 
-        - In a past run, Robyn rasterized 95% of the staged tiles with 10 nodes.
         - A future to-do is to set up a special `rsync` script that will continuously check for new geotiff files in the `/tmp` folder and sync them to `/scratch` _without needing to manually run an `rsync` script at intervals_.   
     - **Change the line `#SBATCH --time=48:00:00`** which represents the total amount of time a job is allowed to run (and charge credits based on minutes and cores) before it is cancelled. The full 48 hours should be set if doing a full IWP run. If doing a test run, decrease this.
         - To calculate the number of CPU hours that will be charged: multiply the amount of _cores_ in each node (128 CPU cores per node) by the number of nodes and hours. So if you're using 2 nodes for 3 hours and CPU cores, you multiply 128 cores x 3 hours x 2 nodes = ~768 CPU hours will be charged.
@@ -65,7 +63,7 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
     - Run `ds staged_footprints -d0` every few minutes. When the MB stops growing (usually just takes 5-10 min with the whole high ice dataset), you know the sync is complete.
     - Alternatively, you could run `find staged_footprints -type f | wc -l` and check when the number of files stops growing.
     
-    Kastan and Robyn suggested that this step could be adjusted to be faster since Delta works faster moving a few large files than it does working with many small files. These files could be consolidated by "tarring" the files together before the transfer, then un-tar the files in the `/tmp` dir.
+    This step could be adjusted to be faster since Delta works faster moving a few large files than it does working with many small files. These files could be consolidated by "tarring" the files together before the transfer, then un-tar the files in the `/tmp` dir.
 
 - Adjust `viz-workflow/PRODUCTION_IWP_CONFIG.py` as needed:
     - Change the variable `head_node` to the head node.

@@ -16,11 +16,21 @@
 
 Currently our visualization pipeline is designed to take vector files (shapefiles, geopackage, geojson) as input. With a little work, we can extend it to also take raster files (geoTIFF) as input.
 
+There are various output formats: three standardized tilesets of the same data in different formats. Two of these tilesets, the GeoPackages and GeoTIFFS, allow data to be used for further analysis and pair well with other PDG datasets since they are standardized. The third tileset of PNG images is only for visualization and does not contain actual data for users to utilize, so that tileset is not archived. This tileset helps us visualize the data quickly on the portal (as it is pre-rendered for all zoom-levels and statistics) and helps the users understand what regions and layers they are interested in, as well as trends in the data with a palette.
+
 ## Output formats
+
+### GeoPackages (vector data)
+
+A tileset of the data for the highest resolution only. This data is the first output from the viz-workflow, so the standardization of extent and the polygons, and the deduplication, are both done in the staging step. Vector data is more precise than raster data. This data is not aggregated to lower resolutions. All existing attributes for geometries in the input data are retained, plus extra attributes are added that are helpful for later steps in the viz pipeline.
+
+### GepTIFFs (raster data)
+
+A tileset of the data for all resolutions, starting at the highest resolution. Lower resolution rasters are created by resampling the higher resolution rasters. This tileset is the second output from the viz pipeline. In the rasterization step, the statistics are calculated that are specified in the config. A band is created in every raster for every statistic.
 
 ### Web tiles (raster data)
 
-To display raster data on the web, we convert them to web tiles: png or jpeg image files that are of a standard size, cover a known geospatial area, and are of a known resolution.
+To display raster data on the web, we convert the GeoTIFF tileset to a web tile tileset: PNG or jpeg image files that are of a standard size, cover a known geospatial area, and are of a known resolution. This is the third product from the viz pipeline, which applies a palette to each stat (band) in the GeoTIFFs. Each web tile tileset becomes a layer on the portal.
 
 Here is quick little introduction to web tiles and why we use them: - [Learn how zoomable maps works, what coordinate systems are, and how to convert between them](https://www.maptiler.com/google-maps-coordinates-tile-bounds-projection/#3/-28.58/66.58)
 
