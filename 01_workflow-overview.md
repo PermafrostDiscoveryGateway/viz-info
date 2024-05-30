@@ -7,9 +7,14 @@
   - Some data layers are made up of multiple files that vary in size and have unpredictable bounding boxes. As it is, it would be difficult for a researcher to download the section of data that they are interested in.
   - Some files overlap with one another and so we need to "deduplicate" these sections of overlap
 - To prepare data we:
-  - combine input files that are part of the same layer
-  - convert them to files of a standard size and geospatial extent
-  - convert them to formats that are good for archiving (geopackage and GeoTIFF) and good for the web (png images and Cesium 3D tiles) 
+  - [viz-staging](https://github.com/PermafrostDiscoveryGateway/viz-staging):
+    - combine input files that are part of the same layer
+    - convert them to files of a standard size and geospatial extent
+  - convert the data to purpose-built output formats:
+    - [viz-raster](https://github.com/PermafrostDiscoveryGateway/viz-raster): formats
+      that are good for archiving (geopackage and GeoTIFF)
+    - [viz-3dtiles](https://github.com/PermafrostDiscoveryGateway/viz-3dtiles): formats
+      that are good for the web (png images and Cesium 3D tiles) 
 - See [these slides](https://docs.google.com/presentation/d/13CSV7w8Ew7XoD0YrCcgGNvuh9DrLSsF-6fL16hJBWiE) for a visual overview of the workflow
 
 ## Input formats
