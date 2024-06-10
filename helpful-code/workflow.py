@@ -26,23 +26,33 @@ import logging
 import logging.handlers
 from pdgstaging import logging_config
 
+import shutil
+
 # for transferring the log to workdir
 import subprocess
 from subprocess import Popen
 
+print("Removing old directories and files...")
+old_filepaths = ["staging_summary.csv",
+                 "raster_summary.csv",
+                 "raster_events.csv",
+                 "config__updated*",
+                 "log.log"]
+for old_file in old_filepaths:
+  if os.path.exists(old_file):
+      os.remove(old_file)
+
+old_dirs = ["staged",
+            "geotiff",
+            "web_tiles"]
+for old_dir in old_dirs:
+  if os.path.exists(old_dir) and os.path.isdir(old_dir):
+      shutil.rmtree(old_dir)
+
 # --------------------------------------------------------------
 
-# import 3 input data files
-data_dir = '/home/jcohen/iwp_russia_subset_clipToFP_PR/'
-base_dir = Path(data_dir + 'iwp')
-filename = '*.shp'
-# To define each .shp file within each subdir as a string representation with forward slashes, use as_posix()
-# The ** represents that any subdir string can be present between the base_dir and the filename
-input = [p.as_posix() for p in base_dir.glob('**/' + filename)]
-
-# pull filepaths for footprints in the same way we pulled IWP shp file paths
-base_dir_fp = Path(data_dir + 'footprints')
-fps = [p.as_posix() for p in base_dir_fp.glob('**/' + filename)]
+# import 3 IWP input data files and footprints
+data_dir = '/home/jcohen/testing/testing_datasets/iwp_fp_3_files/'
 
 # define workflow configuration
 config = {
@@ -85,16 +95,9 @@ config = {
       "nodata_color": "#ffffff00"
     },
   ],
-  "deduplicate_at": [
-    "raster"
-  ],
-  "deduplicate_keep_rules": [
-    [
-      "Date",
-      "larger"
-    ]
-  ],
-  "deduplicate_method": "footprints"
+  "deduplicate_at": None,
+  "deduplicate_keep_rules": None,
+  "deduplicate_method": None
 }
 
 # --------------------------------------------------------------
