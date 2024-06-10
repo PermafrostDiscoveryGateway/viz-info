@@ -4,7 +4,7 @@ We have created five repos that contain python code for preparing data for displ
 ## viz-staging (pdgstaging)
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-staging)
 
-This package was designed to prepare vector data for future converstion steps. Mainly, it "slices" large vector files into smaller files that each have a bounding box corresponding to a tile in a given TMS. It also adds properties, re-projects the data, does deduplication, and deals with paths and all the configuration options.
+This package was designed to prepare vector data for future converstion steps. Mainly, it "slices" large vector files into smaller files that each have a bounding box corresponding to a tile in a given TMS. It also adds properties, re-projects the data, does deduplication flagging, removes duplicates if specified to do so in the config, deals with filepaths, and all the configuration options.
 
 ## viz-raster (pdgraster)
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-raster)
@@ -31,9 +31,9 @@ Since it was created, some of these classes were developed into the original `py
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
 
 The viz-workflow repo deals with running methods from the above packages in parallel. It has a couple of branches under active development:
-	- [`main`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
-	- [`parsl-workflow-breakdown`](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow-breakdown) - parsl workflow, typically executed on the Datateam server hosted by the National Center for Ecological Analysis and Synthesis
-	- [`https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/docker-parsl-workflow`] - converting the workflow to use docker and kubernetes to be interoperable across different machines
+- [main](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
+- [parsl-workflow-breakdown](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow-breakdown) - parsl workflow, typically executed on the Datateam server hosted by the National Center for Ecological Analysis and Synthesis\
+- [docker-parsl-workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/docker-parsl-workflow) - converting the workflow to use Docker and Kubernetes to take advantage of the UCSB high performance computing cluster(s) and be interoperable across different machines such as Google Cloud Platform
 
 # Other python packages
 - Our packages rely heavily on some external packages that it would be good to become familiar with:
