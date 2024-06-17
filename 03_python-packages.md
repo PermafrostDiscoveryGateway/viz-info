@@ -35,8 +35,28 @@ The viz-workflow repo deals with running methods from the above packages in para
 - [parsl-workflow-breakdown](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow-breakdown) - parsl workflow, typically executed on the Datateam server hosted by the National Center for Ecological Analysis and Synthesis\
 - [docker-parsl-workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/docker-parsl-workflow) - converting the workflow to use Docker and Kubernetes to take advantage of the UCSB high performance computing cluster(s) and be interoperable across different machines such as Google Cloud Platform
 
+# Releases and EZID
+
+Each time a viz repo's main branche is updated, we make a release with a version. See [here](https://github.com/PermafrostDiscoveryGateway/viz-staging/releases) for an example page of all the releases for one repo. The new release `version` should always be updated in the `pyproject.toml` file. Contributors (`authors`) should not be removed, but contributors should be appended. 
+
+We also have to update  EZID so that the release can be cited. After making the release, here are the steps to update EZID:
+
+- Go to the [EZID website](https://ezid.cdlib.org/search) and search for the most recent completed release of the package’s DOI, the one _prior_ to the release you are working on creating an XML for.
+- Click the link to open the XML and copy it
+- In VScode, paste the copied XML into a new xml file (name it anything, such as `release_new.XML`), and correct formatting if needed (you can use an online pretty XML formatter).
+- Make all necessary changes to the XML:
+  - Version number for the release itself
+  - Date of release
+  - Software heritage ID
+    - To retrieve this, first navigate to the software heritage website for the repo (for viz-workflow it's [here](https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/PermafrostDiscoveryGateway/viz-workflow)) and click “save again” (button on thr right side of the page) then retrieve the Software heritage ID by copying the “Tip revision” string (bolded numbers and letters like `f39a3b7b53823e41ebae1d28136a95cdde5df716`)
+  - Make sure the DOI “new version of” is the older version DOI and the new DOI is where it should be
+- Use the UPDATE command, the last line in [these instructions](https://gist.github.com/rushirajnenuji/cd579fc1993396aaa8863295cd4a4111), making sure to replace the DOI and the name of the XML too
+
+Link to this EZID page when referencing the package release in documentation.
+
 # Other python packages
 - Our packages rely heavily on some external packages that it would be good to become familiar with:
 	- [GeoPandas](https://geopandas.org/en/stable/) (and [pandas](https://pandas.pydata.org/)) - for reading, manipulating, and writing vector data
 	- [Rasterio](https://rasterio.readthedocs.io/en/latest/) - for reading, manipulating, and writing raster data
 	- [rio-tiler](https://github.com/cogeotiff/rio-tiler) - not used in the workflow yet, but we may want to incorporate it when our workflow is extended to allow raster data as input (it has functionality to deal with overlapping rasters, partial reading of raster data, categorical color palettes, and a lot more)
+
