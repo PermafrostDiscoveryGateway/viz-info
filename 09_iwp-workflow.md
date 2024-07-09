@@ -1,6 +1,6 @@
 # Running the Ice Wedge Polygon Visualization Workflow on Delta
 
-The ice wedge polygons dataset is very large, so we use `ray` to run the workflow in parallel on the Delta server. Because this is not an NCEAS server, it is important to pay attention to how many Delta credits are being utilized as each allocation's funding is finite. 
+The ice-wedge polygons dataset is very large, so we use `ray` to run the workflow in parallel on the Delta server. Because this is not an NCEAS server, it is important to pay attention to how many Delta credits are being utilized as each allocation's funding is finite. 
 
 ## Steps:
 
@@ -79,18 +79,13 @@ The ice wedge polygons dataset is very large, so we use `ray` to run the workflo
 
     ```python
         try:
-            ########## MAIN STEPS ##########
             print("Starting main...")
-            
-            # (optionally) Comment out steps you don't need 😁
-            # todo: sync footprints to nodes.
+            # TODO: sync footprints to nodes.
             step0_staging()        
-            # todo: merge_staging()
-            # DO NOT RUN step1 UNTIL WORKFLOW CAN ACCOMODATE 3DTILING: step1_3d_tiles() # default parameter batch_size = 300
-            # step2_raster_highest() # rasterize highest Z level only, default batch_size = 100, default cmd_line_args = None 
-            # todo: immediately after initiating above step, start rsync script to continuously sync geotiff files
-            # step3_raster_lower(batch_size_geotiffs=100) # rasterize all LOWER Z levels
-            # step4_webtiles(batch_size_web_tiles=250) # convert to web tiles.
+            # TODO: merge_staging()
+            # step2_raster_highest()
+            # step3_raster_lower()
+            # step4_webtiles()
             
     ```
     - In the future, when we run the whole workflow from start to finish, this system of uncommenting steps and running manual steps in between scripts won't be necessary, but this workflow is not yet automated. The way the workflow is structured now:

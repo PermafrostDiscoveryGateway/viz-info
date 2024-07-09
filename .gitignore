@@ -44,3 +44,14 @@ vignettes/*.pdf
 
 # translation temp files
 po/*~
+
+# output from viz-workflow runs
+*/staged
+*/geotiff
+*/web_tiles
+*/config__updated
+*/staging_summary/csv
+*/raster_events.csv
+*/raster_summary.csv
+*/log.log
+*/runinfo

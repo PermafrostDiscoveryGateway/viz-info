@@ -72,7 +72,7 @@ config = {
   "tms_id": "WGS1984Quad",
   "z_range": [
     0,
-    15
+    13
   ],
   "geometricError": 57,
   "z_coord": 0,
@@ -95,9 +95,9 @@ config = {
       "nodata_color": "#ffffff00"
     },
   ],
-  "deduplicate_at": None,
-  "deduplicate_keep_rules": None,
-  "deduplicate_method": None
+  "deduplicate_at": ["raster"],
+  "deduplicate_keep_rules": [["Date", "larger"]],
+  "deduplicate_method": "footprints"
 }
 
 # --------------------------------------------------------------
