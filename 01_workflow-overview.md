@@ -2,14 +2,14 @@
 
 - The goal of the workflow is to input geospatial files and prepare them for archiving in DataONE repositories as well as for viewing in online, interactive maps.
 - We need to prepare the data in this way because:
-  - Our input files are usually much too large to display on the web. A user visiting our website would first need to download all of the data, which would take days in some cases. The browser would not be able to render such large files either (in fact, some files are also too large to render in Desktop software)
+  - Our input files are usually much too large in extent and has much too high resolution to display directly on the web without tiling. A user visiting our website would first need to download all of the data, which would take days in some cases. The browser would not be able to render such large files either (in fact, some files are also too large to render in desktop software such as ArcGIS).
   - Some input formats are not supported by most browsers - e.g. GeoTIFF (many GeoTIFFs also don't have a built in color scale)
-  - Some data layers are made up of multiple files that vary in size and have unpredictable bounding boxes. As it is, it would be difficult for a researcher to download only the section of data that they are interested in.
-  - Some files overlap with one another and so we need to "deduplicate" these sections of overlap. The stage of the workflow at which we do this may depend on the researcher's preference.
-- To prepare data we:
+  - Some data layers are made up of multiple files that vary in size and have unpredictable bounding boxes. As it is, it would be difficult for a researcher to download only the spatial portion or temporal slice of data that they are interested in.
+  - Some files overlap with one another and so we need to "deduplicate" these sections of overlap. The stage of the workflow at which we do this and which deduplication approach is applied may depend on the researcher's preference.
+- To prepare data for visualization and archival, we do the following:
   - combine input files that are part of the same layer 
   - convert them to files of a standard size and geospatial extent
-  - convert them to formats that are good for archiving (geopackage and GeoTIFF) and good for the web (PNG images and Cesium 3D tiles) 
+  - convert them to formats that are efficient for archiving (geopackage and GeoTIFF) and good for the web (PNG images and Cesium 3D tiles) 
 - See [these slides](https://docs.google.com/presentation/d/13CSV7w8Ew7XoD0YrCcgGNvuh9DrLSsF-6fL16hJBWiE) for a visual overview of the workflow
 
 ## Input formats
@@ -33,27 +33,11 @@ A tileset of the data for the highest resolution only. This data is the first ou
 
 A tileset of the data for all resolutions, starting at the highest resolution. Lower resolution rasters are created by resampling the higher resolution rasters. This tileset is the second output from the viz pipeline. In the rasterization step, the statistics are calculated that are specified in the config. A band is created in every raster for every statistic.
 
-### Web tiles (raster data)
+### Web tiles (raster data, lightweight and with a pre-defined palette)
 
 To display raster data on the web, we convert the GeoTIFF tileset to a web tile tileset: PNG or jpeg image files that are of a standard size, cover a known geospatial area, and are of a known resolution. This is the third product from the viz pipeline, which applies a palette to each stat (band) in the GeoTIFFs. Each web tile tileset becomes a layer on the portal.
 
 Here is quick little introduction to web tiles and why we use them: - [Learn how zoomable maps works, what coordinate systems are, and how to convert between them](https://www.maptiler.com/google-maps-coordinates-tile-bounds-projection/#3/-28.58/66.58)
-
-**tile** 
-a rectangular pictorial representation of geographic data which can be uniquely defined by a pair of indices for the column and row (x & y) along with an identifier for the tile matrix.
-
-**tile matrix**  
-a collection of tiles for a fixed scale (z)
-
-**tile matrix set** ("TMS")
-a collection of tile matrices defined at different scales (z-indices)
-
-**OGC Two Dimensional Tile Matrix Set**
-a collection of standardized tile matrix sets, see [the docs](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html)
-
-**WGS1984Quad**
-the OCG 2D TMS that we have generally been using for the tiles we create because it is supported by Cesium. Defined [here](https://docs.ogc.org/is/17-083r2/17-083r2.html#65). 
-
 
 ### Cesium 3D tiles (vector data)
 
@@ -68,3 +52,20 @@ Here are some resources to learn more about Cesium 3D Tiles:
 - [Introductory info about 3D tiles](https://cesium.com/why-cesium/3d-tiles/)
 - [Reference card](https://github.com/CesiumGS/3d-tiles/blob/main/3d-tiles-reference-card.pdf) - A great place to start learning about the structure of 3D tiles. 
 - [The complete specification](https://github.com/CesiumGS/3d-tiles) - For in-depth details about the spec. See it in [HTML](https://docs.opengeospatial.org/cs/18-053r2/18-053r2.html).
+
+## General Terminology
+
+**Tile** 
+- a rectangular pictorial representation of geographic data which can be uniquely defined by a pair of indices for the column and row (x & y) along with an identifier for the tile matrix.
+
+**Tile Matrix**  
+- a collection of tiles for a fixed scale (z)
+
+**Tile Matrix Set** ("TMS")
+- a collection of tile matrices defined at different scales (z-indices)
+
+**Open Geospatial Consortium Two-Dimensional Tile Matrix Set**
+- a collection of standardized tile matrix sets, see [the docs](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html)
+
+**WGS1984Quad**
+- the Open Geospatial Consortium 2D Tile Matrix Set that we use for the tiles we create because it is supported by Cesium. Defined [here](https://docs.ogc.org/is/17-083r2/17-083r2.html#65). 

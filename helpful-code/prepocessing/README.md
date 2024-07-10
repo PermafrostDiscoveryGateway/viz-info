@@ -1,0 +1,19 @@
+## Preprocessing for Permafrost Discovery Gateway datasets prior to visualization
+
+When datasets are submitted to the Permafrost Discovery Gateway for visualization and archival at the Arctic Data Center, there is usually some preprocessing steps that need to come before we can use the data as input into the visualization workflow. Examples include:
+
+- remove `NA` values from attributes that will become data layers
+- convert a string attribute into a numerical, categorical attribute so the vectors can be rasterized and resampled to lower resolution tiles
+- for datasets that are in an Arctic projected coordinate reference system, split any polygons that overlap with the antimeridian so they are not converted into invalid polygons when the coordinate reference system is converted to WGS1984
+- etc.
+
+The end-goal is for the workflow to eventually reach a state where it is automated and generalized enough such that any dataset can be used as input no matter if the dataset has issues or unique data formatting. This will be achieved by executing the necessary preprocessing steps during the first workflow step: staging. During staging, there will be checks for situations that require adjustements to the data, and if  preprocessing steps are triggered, they will occur prior to tiling the data. All preprocessing steps that have been necessary for historical data layers have been documented in the `viz-staging` [issues](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues) so that we can add these features to the `pdgstaging` package and get closer to our goal of complete automation.
+
+This directory contains scripts that were used to preprocess data layers. This code serves as an archive so these steps will also be taken for data layers in the future. While each script contains comments and GitHub links within, see below for an overview of what each script does to prepare data for the visualization workflow.
+
+| Script | Description |
+| -------- | --------------------|
+| `clean_lake_change_data.py` | Identify and remove rows with an invalid value in any column (`NaN`, `Inf`, or `-Inf`) in a geospatial vector dataset with a specific file hierarchy. Save the cleaned files to a new directory while retaining the file hierarchy and record which rows had those invalid values so that we can identify patterns that may have caused these values and address the issue for future versions. | 
+| `find_dups.py` | Find all geosptial files in a directory, recursively, that have a certain file extension and identify which rows have a certain value for a certain attribute of interest. Create a new geodaatframe for the rows that matched the criteria and save new files. This script was created in order to validate improvements that were made to the deduplication approaches in the `pdgstaging` package. In other words, this script checked that the adjustments to the shource code flagged all duplicate polygons correctly. |
+| `bounding_box_tiles.ipynb` | Contains operations with `mercantile` and `morecantile` to work with Tile Matrix Sets to get the bounds and centroid of certain tiles. These code chunks are useful for identifying tiles to set for the "zoom to" feature in the PDG portal layers. |
+| `geospatial_cheat_sheet.ipynb` | Helpful cleaning, plotting, and viz-workflow code that is commonly used when exploring a new vector or raster dataset, processing a small subset for testing, or plotting. |
