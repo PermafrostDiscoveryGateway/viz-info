@@ -2,6 +2,8 @@
 
 The ice-wedge polygons dataset is very large, so we use `ray` to run the workflow in parallel on the Delta server. This is one of our High Performance Computing platforms. Because this is not an NCEAS server, it is important to pay attention to how many Delta credits are being utilized as each allocation's funding is finite. To get access to Delta, Juliet can help make you an account.
 
+To follow along, use scripts within the [PermafrostDiscoveryGateway/viz-workflow repo](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
+
 ## Steps:
 
 - ssh into the Delta server in VScode.

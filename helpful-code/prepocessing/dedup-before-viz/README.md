@@ -1,3 +1,5 @@
+## `dedup-before-viz`
+
 For some datasets, applying the neighbor deduplication method would be helpful so that users can access deduplicated, clean data outside of the tiled format. This means that the neighbor deduplication approach that can be applied withint the viz workflow for the satged tilesets should instead be applied to the input data before it is tiled. The script `dedup_before_viz_example.py` shows an example of this process for 2 adjacent UTM zones of lake change data from Ingmar Nitze. 
 
 ### Notes:
