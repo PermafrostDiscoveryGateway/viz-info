@@ -29,7 +29,7 @@ See details for these four formats below.
 
 A tileset of the data for the highest resolution only. This data is the first output from the viz-workflow, so the standardization of extent and the polygons, and the deduplication, are both done in the staging step. Vector data is more precise than raster data. This data is not aggregated to lower resolutions. All existing attributes for geometries in the input data are retained, plus extra attributes are added that are helpful for later steps in the viz pipeline.
 
-### GepTIFFs (raster data)
+### GeoTIFFs (raster data)
 
 A tileset of the data for all resolutions, starting at the highest resolution. Lower resolution rasters are created by resampling the higher resolution rasters. This tileset is the second output from the viz pipeline. In the rasterization step, the statistics are calculated that are specified in the config. A band is created in every raster for every statistic.
 

@@ -11,6 +11,13 @@ This package was designed to prepare vector data for future converstion steps. M
 
 This package deals with the conversion of vector data into rasters - both GeoTIFFs for archiving and PNGs for displaying in Cesium. Though it has generic classes and methods in it that could be used flexibly, at this point it depends on `pdgstaging` and assumes that input has already gone through the staging step.
 
+## viz-workflow (pdg_workflow)
+[**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
+
+The viz-workflow repo deals with running methods from the above packages in parallel. It has a couple of branches under active development:
+- [main](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
+- [kubernetes, docker, and parsl workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/enhancement-1-k8s/docker-parsl-workflow) - converting the workflow to use Kubernetes, Docker, and parsl to take advantage of the UCSB high performance computing clusters and be interoperable across different platforms such as the Google Cloud Platform
+
 ## py3dtiles
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/py3dtiles)
 
@@ -26,14 +33,6 @@ Eventually it would be awesome to do a merge request and give them the change to
 The viz-3d tiles package is essentially a wrapper around the py3dtiles library. It adds classes & functions for building the heirachy of Cesium 3D tileset JSON files, and for reading in shapefiles
 
 Since it was created, some of these classes were developed into the original `py3dtiles` library. We might want to eventually make use of those new classes instead. See [PermafrostDiscoveryGateway/py3dtiles issues#6](https://github.com/PermafrostDiscoveryGateway/py3dtiles/issues/6).
-
-## viz-workflow (pdg_workflow)
-[**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
-
-The viz-workflow repo deals with running methods from the above packages in parallel. It has a couple of branches under active development:
-- [main](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
-- [parsl-workflow-breakdown](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/parsl-workflow-breakdown) - parsl workflow, typically executed on the Datateam server hosted by the National Center for Ecological Analysis and Synthesis\
-- [docker-parsl-workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/docker-parsl-workflow) - converting the workflow to use Docker and Kubernetes to take advantage of the UCSB high performance computing cluster(s) and be interoperable across different machines such as Google Cloud Platform
 
 # Releases and EZID
 
