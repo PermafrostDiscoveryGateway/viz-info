@@ -44,12 +44,23 @@ We also have to update  EZID so that the release can be cited. After making the 
 - Click the link to open the XML and copy it
 - In VScode, paste the copied XML into a new xml file (name it anything, such as `release_new.XML`), and correct formatting if needed (you can use an online pretty XML formatter).
 - Make all necessary changes to the XML:
-  - Version number for the release itself
-  - Date of release
+  - DOI:
+    - `<identifier identifierType="DOI">10.18739/A2Z60C395</identifier>`
+  - Version number for the release itself and the title:
+    - `<version>0.9.2</version>`
+    - `<title>Viz-staging: vector data tiling for geospatial visualization (version 0.9.2)</title>`
+  - Date and year of release:
+    - `<date dateType="Created">2024-06-18</date>`
+    - `<publicationYear>2024</publicationYear>`
   - Software heritage ID
-    - To retrieve this, first navigate to the software heritage website for the repo (for viz-workflow it's [here](https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/PermafrostDiscoveryGateway/viz-workflow)) and click “save again” (button on thr right side of the page) then retrieve the Software heritage ID by copying the “Tip revision” string (bolded numbers and letters like `f39a3b7b53823e41ebae1d28136a95cdde5df716`)
-  - Make sure the DOI “new version of” is the older version DOI and the new DOI is where it should be
-- Use the UPDATE command, the last line in [these instructions](https://gist.github.com/rushirajnenuji/cd579fc1993396aaa8863295cd4a4111), making sure to replace the DOI and the name of the XML too
+    - To retrieve this, first navigate to the software heritage website for the repo (for viz-workflow it's [here](https://archive.softwareheritage.org/browse/origin/directory/?origin_url=https://github.com/PermafrostDiscoveryGateway/viz-workflow)) and click “save again” (button on the right side of the page) then retrieve the software heritage ID by copying the “Tip revision” string (bolded numbers and letters like `f39a3b7b53823e41ebae1d28136a95cdde5df716`)
+  - The DOI “new version of” is the most recent _older_ DOI
+    - `<relatedIdentifier relatedIdentifierType="DOI" relationType="IsNewVersionOf">10.18739/A2RV0D26C</relatedIdentifier>`
+- Use the UPDATE command, the last line in [these instructions](https://gist.github.com/rushirajnenuji/cd579fc1993396aaa8863295cd4a4111) with some changes:
+  - replace the DOI
+  - replace name of the XML doc to whatever you named it
+  - update the string of letters and numbers with the software heritage link
+  - replace `${EZIDPASS}` with the password (retrieve this from Matt)
 
 Link to this EZID page when referencing the package release in documentation.
 
