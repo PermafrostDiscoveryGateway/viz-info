@@ -1,4 +1,4 @@
-# Getting startup
+# Getting started
 
 ## Set up on the datateam server:
 - Make sure Nick has set you up with a user name on the datateam server
@@ -11,5 +11,11 @@
 ## First tasks
 
 - Work on the current [`viz-staging` issues](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues)
-  - a good first issue: https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/34
+  - good first issues:
+    - [Convert multipolygon geometries into single polygons before staging](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/34)
+    - [Check for invalid data values before staging and integrate removal of observation or fix for observation](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/21)
+    - [Reintegrate option to output intersections in neighbor deduplication](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/44)
+    - [Explore GeoParquet file format as an input to staging](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/40)
+    - [Convert input data CRS to config's input_crs only if there is no CRS in input data](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/26)
+
 
