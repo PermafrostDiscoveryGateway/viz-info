@@ -1,0 +1,89 @@
+---
+title: 'Lake Change: Plot and Split UTM Zone 32601'
+output: html_document
+date: "2024-08-12"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Exploring lake change file for UTM zone 32601 that has already been flagged for which polygons are seawater instead of lakes. 
+
+```{r}
+library(sf)
+library(ggplot2)
+library(leaflet)
+library(mapview)
+library(tidyverse)
+library(dplyr)
+```
+
+```{r}
+fp_32601 <- "~/check_for_todd/check_0812/input/32601_2000-2020_lake_change_land.gpkg"
+gdf_32601 <- st_read(fp_32601) %>% 
+             st_set_crs(32601)
+
+ggplot(data = gdf_32601) +
+  geom_sf(aes(color = within_land), size = 3) +
+  scale_color_manual(values = c("TRUE" = "green", "FALSE" = "red")) +
+  theme_minimal() +
+  labs(title = "Lakes 32601",
+       subtitle = "within_land attribute")
+```
+
+```{r}
+unique(gdf_32601$within_land)
+```
+
+```{r}
+print(sum(gdf_32601$within_land == "TRUE"))
+```
+
+
+```{r}
+colnames(gdf_32601)
+```
+
+```{r}
+gdf_32601_land <- gdf_32601 %>% 
+                  dplyr::filter(within_land == "TRUE")
+
+unique(gdf_32601_land$within_land)
+```
+
+```{r}
+unique(gdf_32601$intersects_coast)
+```
+
+
+```{r}
+gdf_32601 %>% 
+  dplyr::pull(intersects_coast) %>% table()
+```
+
+```{r}
+# gdf_32601_ic <- gdf_32601 %>% filter(intersects_coast == TRUE)
+
+ggplot(data = gdf_32601) +
+  geom_sf(aes(color = intersects_coast), size = 3) +
+  scale_color_manual(values = c("TRUE" = "green", "FALSE" = "red")) +
+  theme_minimal() +
+  labs(title = "Lakes 32601",
+       subtitle = "intersects_coast attribute")
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

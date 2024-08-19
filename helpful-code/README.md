@@ -33,7 +33,7 @@ This directory contains notebooks, python scripts, and documentation for the fol
 | `simple-workflow/workflow.py` | Runs the same workflow as the `workflow.ipynb` notebook, but as a script. This is an opportunity to practice running the workflow as a background job within a `tmux` session. |
 | `parsl-workflow/parsl-workflow.py` | Runs the workflow in parallel with the `parsl` package. This script uses Ingmar Nitze's lake change dataset as input because this dataset is larger than the sample of ice-wedge polygon data used in the simple workflow, and the lake change data demonstrates a different deduplication approach available in the `pdgstaging` package. |
 | `parsl-workflow/config.py` | Visualization workflow config for the `parsl-workflow.py` script. |
-| `preprocessing` | S subdirectory that contains code for data quality checks, plots, and cleaning for PDG datasets. These quality checks and cleaning operations will eventually be integrated into the Python packages as automated steps. See this directory's `README` for more details. |
+| `preprocessing` | A subdirectory that contains code for data quality checks, plots, and cleaning for PDG datasets. These quality checks and cleaning operations will eventually be integrated into the Python packages as automated steps. See this directory's `README` for more details. |
 | `update-PDG-portal.Rmd` | A R markdown document that contains functions to simplify downloading the most recent version of the Permafrost Discovery Gateway portal from the Arctic Data Center and updating the XML document to add a new layer or make other front-end portal changes. |
 
 ## Current Development
