@@ -18,6 +18,10 @@ The viz-workflow repo deals with running methods from the above packages in para
 - [main](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
 - [kubernetes, docker, and parsl workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/enhancement-1-k8s/docker-parsl-workflow) - converting the workflow to use Kubernetes, Docker, and parsl to take advantage of the UCSB high performance computing clusters and be interoperable across different platforms such as the Google Cloud Platform
 
+## viz-points (pdgpoints)
+
+[`viz-points`](https://github.com/PermafrostDiscoveryGateway/viz-points) takes LiDAR point cloud data (as LAS, LAZ, or other correctly georeferenced LiDAR file formats) and outputs 3dtiles point clouds (hierarchically organized `.pnts` data files and some `.json` files that define the hierarchy) that allow web visualization of point clouds. Though we plan on integrating in the future, it is not currently integrated with the rest of the `viz-*` toolset. `viz-points` relies on [Oslandia `py3dtiles`](https://gitlab.com/py3dtiles/py3dtiles) and [RapidLASso `lastools`](https://github.com/LAStools/LAStools).
+
 ## py3dtiles
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/py3dtiles)
 
