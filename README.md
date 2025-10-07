@@ -16,4 +16,4 @@ Everything you need to get started working on the [Permafrost Discovery Gateway]
 
 ### Contributing
 
-Have feedback, questions, or code to contribute? Open a Pull Request or issue in this repository. Alternatively, please contact Juliet Cohen at jcohen@nceas.ucsb.edu.
+Have feedback, questions, or code to contribute? Open a Pull Request or issue in this repository. Alternatively, please contact Alyona Kosobokova at alyonak@nceas.ucsb.edu or Rushiraj Nenuji at nenuji@nceas.ucsb.edu 
