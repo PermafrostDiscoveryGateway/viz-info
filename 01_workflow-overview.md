@@ -55,17 +55,12 @@ Here are some resources to learn more about Cesium 3D Tiles:
 
 ## General Terminology
 
-**Tile** 
-- a rectangular pictorial representation of geographic data which can be uniquely defined by a pair of indices for the column and row (x & y) along with an identifier for the tile matrix.
+**Tile** is a rectangular pictorial representation of geographic data which can be uniquely defined by a pair of indices for the column and row (x & y) along with an identifier for the tile matrix.
 
-**Tile Matrix**  
-- a collection of tiles for a fixed scale (z)
+**Tile Matrix** is a collection of tiles for a fixed scale (z)
 
-**Tile Matrix Set** ("TMS")
-- a collection of tile matrices defined at different scales (z-indices)
+**Tile Matrix Set** ("TMS") is a collection of tile matrices defined at different scales (z-indices)
 
-**Open Geospatial Consortium Two-Dimensional Tile Matrix Set**
-- a collection of standardized tile matrix sets, see [the docs](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html)
+**Open Geospatial Consortium Two-Dimensional Tile Matrix Set** is a collection of standardized tile matrix sets, see [the docs](https://docs.opengeospatial.org/is/17-083r2/17-083r2.html)
 
-**WGS1984Quad**
-- the Open Geospatial Consortium 2D Tile Matrix Set that we use for the tiles we create because it is supported by Cesium. Defined [here](https://docs.ogc.org/is/17-083r2/17-083r2.html#65). 
+**WGS1984Quad** is the Open Geospatial Consortium 2D Tile Matrix Set that we use for the tiles we create because it is supported by Cesium. Defined [here](https://docs.ogc.org/is/17-083r2/17-083r2.html#65). 
