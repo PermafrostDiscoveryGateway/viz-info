@@ -12,7 +12,6 @@
 
 - Work on the current [`viz-staging` issues](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues)
   - good first issues:
-    - [Convert multipolygon geometries into single polygons before staging](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/34)
     - [Check for invalid data values before staging and integrate removal of observation or fix for observation](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/21)
     - [Reintegrate option to output intersections in neighbor deduplication](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/44)
     - [Explore GeoParquet file format as an input to staging](https://github.com/PermafrostDiscoveryGateway/viz-staging/issues/40)
