@@ -3,6 +3,7 @@
 Once the data has been processed, and we have the final output tiles, we need to:
 1) Store and archive the `.gpkg` tiles and `.tiff` GeoTIFF files in the Arctic Data Center / DataONE in a directory that specifies the DOI (`datateam:/var/data/{DOI}`). Note that if there are subdirectories, a README should be provided to clarify how the files are organized.
 2) Store the `.PNG` web tile images and `.B3DM`/`.JSON` Cesium 3D tilesets in a directory that is accessible from the web and contains the same DOI as the other archived tilsets (`datateam:/var/data/tiles/{DOI}`)
+3) Make WMTSCapabilities.xml (Service Metadata) publicly available in the archive directory. 
 
 The exact method that we will use to store and organize all these files is something that we still need to work out. Here is what we are doing for the time being.
 
