@@ -1,6 +1,11 @@
 # Python packages created for PDG
 We have created five repos that contain python code for preparing data for displaying in Cesium and for archiving.
 
+## viz-workflow (pdg_workflow)
+[**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
+
+This package is the main orchestrator for the Permafrost Discovery Gateway (PDG) visualization ecosystem. It centralizes configuration with [ConfigManager](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/main/pdgworkflow/ConfigManager.py) that combines settings and feature flags across PDG packages, defines processing orders with [WorkflowManager](https://github.com/PermafrostDiscoveryGateway/viz-workflow/blob/main/pdgworkflow/WorkflowManager.py), and allows for parallelization with Docker + Parsl on Kubernetes (Argo pods).
+
 ## viz-staging (pdgstaging)
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-staging)
 
@@ -9,14 +14,8 @@ This package was designed to prepare vector data for future converstion steps. M
 ## viz-raster (pdgraster)
 [**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-raster)
 
-This package deals with the conversion of vector data into rasters - both GeoTIFFs for archiving and PNGs for displaying in Cesium. Though it has generic classes and methods in it that could be used flexibly, at this point it depends on `pdgstaging` and assumes that input has already gone through the staging step.
+This package deals with the conversion of vector data into rasters - both GeoTIFFs for archiving and PNGs for displaying in Cesium. The package accepts the deduplicated tiled vector output from viz-staging. The package does not currently depend on viz-staging, and given the right data format and configuration, is provided can rasterize external vector tiles.
 
-## viz-workflow (pdg_workflow)
-[**GitHub link**](https://github.com/PermafrostDiscoveryGateway/viz-workflow)
-
-The viz-workflow repo deals with running methods from the above packages in parallel. It has a couple of branches under active development:
-- [main](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/main) - currently uses `ray` for parallelization on the Delta server hosted by the National Center for Supercomputing Applications
-- [kubernetes, docker, and parsl workflow](https://github.com/PermafrostDiscoveryGateway/viz-workflow/tree/enhancement-1-k8s/docker-parsl-workflow) - converting the workflow to use Kubernetes, Docker, and parsl to take advantage of the UCSB high performance computing clusters and be interoperable across different platforms such as the Google Cloud Platform
 
 ## viz-points (pdgpoints)
 
