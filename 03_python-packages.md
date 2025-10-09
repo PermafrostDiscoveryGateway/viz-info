@@ -41,7 +41,7 @@ Since it was created, some of these classes were developed into the original `py
 
 Each time a viz repo's main branche is updated, we make a release with a version. See [here](https://github.com/PermafrostDiscoveryGateway/viz-staging/releases) for an example page of all the releases for one repo. The new release `version` should always be updated in the `pyproject.toml` file. Contributors (`authors`) should not be removed, but contributors should be appended. 
 
-We also have to update  EZID so that the release can be cited. After making the release, here are the steps to update EZID:
+We also have to update EZID and archive it on [software heritage](https://archive.softwareheritage.org/) so that the release can be cited. After making the release, here are the steps to update EZID:
 
 - Go to the [EZID website](https://ezid.cdlib.org/search) and search for the most recent completed release of the package’s DOI, the one _prior_ to the release you are working on creating an XML for.
 - Click the link to open the XML and copy it
@@ -64,14 +64,21 @@ We also have to update  EZID so that the release can be cited. After making the 
   - replace name of the XML doc to whatever you named it
   - update the string of letters and numbers with the software heritage link
   - replace `${EZIDPASS}` with the password (retrieve this from Matt)
+  - Update the datacite.xml record and make it public using ezid3 [tool](https://github.com/CDLUC3/ezid-client-tools/) or Postman.
+
+Examples:
+
+`./ezid3.py sb-nceas:${EZIDPASS} update doi:{NEW DOI} datacite @datacite-record.xml`
+
+`./ezid3.py sb-nceas:${EZIDPASS} update doi:{NEW DOI} _target {SH_LINK} _status public`
 
 Link to this EZID page when referencing the package release in documentation.
 
 # Other python packages
-- Our packages rely heavily on some external packages that it would be good to become familiar with:
-	- [GeoPandas](https://geopandas.org/en/stable/) (and [pandas](https://pandas.pydata.org/)) - for reading, manipulating, and writing vector data
-	- [Rasterio](https://rasterio.readthedocs.io/en/latest/) - for reading, manipulating, and writing raster data
+Our packages rely heavily on some external packages that it would be good to become familiar with:
+- [GeoPandas](https://geopandas.org/en/stable/) (and [pandas](https://pandas.pydata.org/)) - for reading, manipulating, and writing vector data
+  - [Rasterio](https://rasterio.readthedocs.io/en/latest/) - for reading, manipulating, and writing raster data
   - [ray](https://docs.ray.io/en/latest/ray-overview/getting-started.html) - for parallelization in the Delta server High Performance Computing environment 
   - [parsl](https://parsl.readthedocs.io/en/stable/) - for parallelization in the UCSB server High Performance Computing Environment Google Kubernetes Engine
-	- [rio-tiler](https://github.com/cogeotiff/rio-tiler) - not used in the workflow yet, but we may want to incorporate it when our workflow is extended to allow raster data as input (it has functionality to deal with overlapping rasters, partial reading of raster data, categorical color palettes, and a lot more)
+  - [rio-tiler](https://github.com/cogeotiff/rio-tiler) - not used in the workflow yet, but we may want to incorporate it when our workflow is extended to allow raster data as input (it has functionality to deal with overlapping rasters, partial reading of raster data, categorical color palettes, and a lot more)
 
