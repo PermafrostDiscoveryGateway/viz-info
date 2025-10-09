@@ -14,7 +14,10 @@
 
 ## Input formats
 
-Currently our visualization pipeline is designed to take vector files as input, such as shapefiles, GeoPackages, or GeoJSON files. With a little work, we can extend it to also take raster files (geoTIFF) as input.
+Currently, our visualization pipeline is designed to take vector files as input, such as shapefiles, GeoPackages, or GeoJSON files. With a little work, we can extend it to also take raster files (geoTIFF) as input. With the (v1.0.0 release)[[https://github.com/PermafrostDiscoveryGateway/viz-workflow/releases/tag/1.0.0], we introduced support for defining custom TileMatrixSets (TMS) beyond those already included in morecantile. You can find the list of supported grids and a guide on creating custom grids in the [morecantile documentation](https://developmentseed.org/morecantile/usage/#list-supported-grids). 
+
+
+With the (1.0.0) release we added support for custom TMS that is not already in morecantile (list availibel starndart one is here). See the example of running workflow with custom TMS here 
 
 ## Output formats
 
