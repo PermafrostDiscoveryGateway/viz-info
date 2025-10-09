@@ -32,4 +32,4 @@ In these project boards, the `P0` category is the highest priority and all the t
     - we would no longer have to pre-create all the PNG tiles either
     - would make it easier for a user to download a given area of data at a given resolution
 - Use [STAC](https://stacspec.org/en) to catalog our spatial assets
-	- See also https://github.nceas.ucsb.edu/KNB/arctic-data/pull/368#issuecomment-27640
+	- See also [STAC ticket](https://github.com/PermafrostDiscoveryGateway/viz-workflow/issues/57)
