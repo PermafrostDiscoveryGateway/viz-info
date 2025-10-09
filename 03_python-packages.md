@@ -77,8 +77,8 @@ Link to this EZID page when referencing the package release in documentation.
 # Other python packages
 Our packages rely heavily on some external packages that it would be good to become familiar with:
 - [GeoPandas](https://geopandas.org/en/stable/) (and [pandas](https://pandas.pydata.org/)) - for reading, manipulating, and writing vector data
-  - [Rasterio](https://rasterio.readthedocs.io/en/latest/) - for reading, manipulating, and writing raster data
-  - [ray](https://docs.ray.io/en/latest/ray-overview/getting-started.html) - for parallelization in the Delta server High Performance Computing environment 
-  - [parsl](https://parsl.readthedocs.io/en/stable/) - for parallelization in the UCSB server High Performance Computing Environment Google Kubernetes Engine
-  - [rio-tiler](https://github.com/cogeotiff/rio-tiler) - not used in the workflow yet, but we may want to incorporate it when our workflow is extended to allow raster data as input (it has functionality to deal with overlapping rasters, partial reading of raster data, categorical color palettes, and a lot more)
+- [Rasterio](https://rasterio.readthedocs.io/en/latest/) - for reading, manipulating, and writing raster data
+- [ray](https://docs.ray.io/en/latest/ray-overview/getting-started.html) - for parallelization in the Delta server High Performance Computing environment 
+- [parsl](https://parsl.readthedocs.io/en/stable/) - for parallelization in the UCSB server High Performance Computing Environment Google Kubernetes Engine
+- [rio-tiler](https://github.com/cogeotiff/rio-tiler) - not used in the workflow yet, but we may want to incorporate it when our workflow is extended to allow raster data as input (it has functionality to deal with overlapping rasters, partial reading of raster data, categorical color palettes, and a lot more)
 
