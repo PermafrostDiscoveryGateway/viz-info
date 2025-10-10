@@ -27,7 +27,7 @@ mkdir -p first_run/input
 # Put a vector file here
 # Example: first_run/input/ArcticRTSVolLatLong.gpkg
 ```
-[Download ArcticRTSVolLatLong.gpkg]()
+[Download ArcticRTSVolLatLong.gpkg](https://github.com/PermafrostDiscoveryGateway/viz-info/tree/main/helpful-code/first_run/input)
 
 ## 3) Minimal runner
 
