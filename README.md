@@ -1,6 +1,6 @@
 # Permafrost Discovery Gateway Visualization Workflow: Overview & Example Code
 
-Everything you need to get started working on the [Permafrost Discovery Gateway](https://arcticdata.io/catalog/portals/permafrost) and [Arctic Data Center](https://arcticdata.io/catalog) developement team.
+Everything you need to get started working on the [Permafrost Discovery Gateway](https://arcticdata.io/catalog/portals/permafrost) and [Arctic Data Center](https://arcticdata.io/catalog) development team.
  
 - [01: Workflow overview](01_workflow-overview.md) - About web tiles & Cesium 3D tiles; how and why we create them.
 - [02: Data to process](02_data-to-process.md) - Data layers that we're working on and those that we hope to process in the future.
@@ -12,7 +12,7 @@ Everything you need to get started working on the [Permafrost Discovery Gateway]
 - [08: Getting started](08_getting-started.md) - Getting set-up and first tickets for visualization repositories.
 - [09: IWP workflow](09_iwp-workflow.md) - Steps to run the complex ice-wedge polygon workflow on the Delta server hosted by the National Center for Supercomputing Applications, using `ray` for parallelization.
 - [10: Update py3dtiles](10_update-py3dtiles.md) - Detailed steps to update `py3dtiles` with recent `oslandia` updates, test updates, and the git flow for navigating the branches.
-- [11: First Run](11_first_run.md) - Minimal Setup Guide
+- [11: First Run](11_first-run.md) - Minimal Setup Guide
 - [helpful-code](https://github.com/PermafrostDiscoveryGateway/viz-info/tree/main/helpful-code) - Contains notebooks, scripts, configuration documents, and step-by-step documentation to get started running the visualization workflow and adding layers to the portal. See this subdirectory's `README` for more information.
 
 ### Contributing
