@@ -80,7 +80,7 @@ WMTSCapablities.xml
 
 ## 5) Feature flags
 
-These control which parts of the pipeline execute and how existing outputs are handled. All flags shown below default to the values given in `ConfigManager.defaults`.
+These configs/feature flags control separate parts of the pipeline execution and how existing outputs are handled. All flags shown below default to the values given in `ConfigManager.defaults`.
 
 | Key                         | Type  | Default | What it does                                                                                           | When to change it |
 |------------------------------|-------|----------|---------------------------------------------------------------------------------------------------------|-------------------|
