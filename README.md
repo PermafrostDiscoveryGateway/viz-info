@@ -13,6 +13,7 @@ Everything you need to get started working on the [Permafrost Discovery Gateway]
 - [09: IWP workflow](09_iwp-workflow.md) - Steps to run the complex ice-wedge polygon workflow on the Delta server hosted by the National Center for Supercomputing Applications, using `ray` for parallelization.
 - [10: Update py3dtiles](10_update-py3dtiles.md) - Detailed steps to update `py3dtiles` with recent `oslandia` updates, test updates, and the git flow for navigating the branches.
 - [11: First Run](11_first-run.md) - Minimal Setup Guide
+- [12: Custom TMS](12_custom_TMS.md) - Running viz-workflow with Custom TMS 
 - [helpful-code](https://github.com/PermafrostDiscoveryGateway/viz-info/tree/main/helpful-code) - Contains notebooks, scripts, configuration documents, and step-by-step documentation to get started running the visualization workflow and adding layers to the portal. See this subdirectory's `README` for more information.
 
 ### Contributing
