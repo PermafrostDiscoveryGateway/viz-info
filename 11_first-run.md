@@ -87,10 +87,10 @@ These configs/feature flags control separate parts of the pipeline execution and
 | `enable_stager`              | bool  | `True`   | Runs **vector staging/tiling** (produces `.gpkg` tiles under `staged/`).                                | Turn **off** if you already staged and only want to rasterize or build web tiles. |
 | `enable_raster`              | bool  | `True`   | Runs **rasterization** to GeoTIFFs (writes to `geotiff/`).                                              | Turn **off** for a vectors-only run. |
 | `enable_web_tiles`           | bool  | `True`   | Produces **web tiles** (PNG/JPG) per statistic & zoom (writes to `web_tiles/`).                         | Turn **off** for GeoTIFF-only runs. |
-| `enable_3dtiles`             | bool  | `True`   | Produces **Cesium 3D Tiles** (writes to `3dtiles/`).                                                    | Turn **off** to skip 3D on day one. |
+| `enable_3dtiles`             | bool  | `True`   | Produces **Cesium 3D Tiles** (writes to `3dtiles/`).                                                    | Turn **off** to skip 3Dtiles generation. |
 | `enable_raster_parents`      | bool  | `True`   | Builds **parent GeoTIFF tiles** by resampling children (pyramids).                                      | Turn **off** to speed up early tests. |
 | `enable_web_tiles_parents`   | bool  | `True`   | Builds **parent web tiles** by resampling children (pyramids).                                          | Turn **off** to speed up early tests. |
-| `generate_wmtsCapabilities`  | bool  | `True`   | Generates **WMTSCapabilities.xml** for clients that read WMTS metadata.                                 | Turn **off** if you don’t need capabilities yet. |
+| `generate_wmtsCapabilities`  | bool  | `True`   | Generates **WMTSCapabilities.xml** for clients that read WMTS metadata.                                 | Turn **off** if you don’t need capabilities. |
 | `overwrite`                  | bool  | `False`  | If **True**, allows the workflow to overwrite existing outputs.                                         | Set **True** while iterating. |
 
 
