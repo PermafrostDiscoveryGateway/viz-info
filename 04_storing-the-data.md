@@ -1,8 +1,8 @@
 # Storing output tiles
 
 Once the data has been processed, and we have the final output tiles, we need to:
-1) Store and archive the `.gpkg` tiles and `.tiff` GeoTIFF files in the Arctic Data Center / DataONE in a directory that specifies the DOI (`datateam:/var/data/{DOI}`). Note that if there are subdirectories, a README should be provided to clarify how the files are organized.
-2) Store the `.PNG` web tile images and `.B3DM`/`.JSON` Cesium 3D tilesets in a directory that is accessible from the web and contains the same DOI as the other archived tilsets (`datateam:/var/data/tiles/{DOI}`)
+1) Store and archive the `.gpkg` tiles and `.tiff` GeoTIFF files in the Arctic Data Center / DataONE in a directory that specifies the DOI (`datateam:/var/data/{DOI-prefix}/{DOI-suffix}`). Note that if there are subdirectories, a README should be provided to clarify how the files are organized.
+2) Store the `.PNG` web tile images and `.B3DM`/`.JSON` Cesium 3D tilesets in a directory that is accessible from the web and contains the same DOI as the other archived tilsets (`datateam:/var/data/tiles/{DOI-prefix}/{DOI-suffix}`)
 3) Make WMTSCapabilities.xml (Service Metadata) publicly available in the archive directory. 
 
 The exact method that we will use to store and organize all these files is something that we still need to work out. Here is what we are doing for the time being.
@@ -14,9 +14,9 @@ Data are stored on the NCEAS servers, including:
 
 ## Testing the web-accessible files
 
-We move the web tiles and 3D tiles to a directory that is mounted on both the `datateam` server and the `adc-demo` server for testing: `datateam.nceas.ucsb.edu:/var/data/tiles/{DOI}`.
+We move the web tiles and 3D tiles to a directory that is mounted on both the `datateam` server and the `adc-demo` server for testing: `datateam.nceas.ucsb.edu:/var/data/tiles/{DOI-prefix}/{DOI-suffix}`.
 
-When PNG tilesets are here, you can access them on the web via: `https://arcticdata.io/data/tiles/{DOI}/web_tiles/{STAT}/WGS1984Quad/{TileMatrix}/{TileCol}/{TileRow}.png`. 
+When PNG tilesets are here, you can access them on the web via: `https://arcticdata.io/data/tiles/{DOI-prefix}/{DOI-suffix}/web_tiles/{STAT}/WGS1984Quad/{TileMatrix}/{TileCol}/{TileRow}.png`. 
 
 If you are displaying a JSON file instead of a tileset, you can create a publy accessible Metacat object and access that file on the web by specifying an object identifier at the end of the URL like `https://arcticdata.io/metacat/d1/mn/v2/object/{ID}`. You can also access a JSON file from another web accessible location besides our archive. We do the latter for the Local Stories layer; the data is pulled from [here](https://www.leonetwork.org/en/explore/posts?query=&type=TWEET&type=POST&type=ARTICLE&mode=geojson_compact&region=&polygon=&bbox=&minlat=&maxlat=&near=&radius=&categories=PERMAFROST%7cPermafrost+Change&categories_anyOrAll=ANY&fromdate=&todate=).
 
@@ -24,7 +24,7 @@ Before adding these tilesets as a new layer to the production portal, we can add
 
 ### Publishing
 
-Once they are production-ready, we make the tilesets in `/var/data/{DOI}` public on the production server. The naming convention is documented [here](https://github.nceas.ucsb.edu/KNB/arctic-data/blob/master/misc/tileset-naming-convention.md).
+Once they are production-ready, we make the tilesets in `/var/data/{DOI-prefix}/{DOI-suffix}` public on the production server. The naming convention is documented [here](https://github.nceas.ucsb.edu/KNB/arctic-data/blob/master/misc/tileset-naming-convention.md).
 
 The publishable GeoTIFF and geopackage tiles are not uploaded like other data objects in DataONE through the user interface. There's too many files for the UI to handle. The tilesets are instead moved to the production server, in the `/var/data/` directory, using the same directory convention as above. It's important that we preserve the directory structure (which reflects the TMS indices). We may also want to consider using STAC to catalog our geospaitial data (see [06: Roadmap](/Users/rtb/git/pdg-info/06_roadmap.md)).
 
