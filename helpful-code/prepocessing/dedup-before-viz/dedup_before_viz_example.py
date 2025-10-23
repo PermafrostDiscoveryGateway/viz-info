@@ -17,7 +17,7 @@ import pandas as pd
 # staging
 import pdgstaging
 from pdgstaging.Deduplicator import deduplicate_neighbors
-from pdgstaging import ConfigManager, TilePathManager, TMSGrid
+from pdgstaging import TilePathManager, TMSGrid
 
 # logging
 from datetime import datetime
