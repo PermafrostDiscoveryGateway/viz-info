@@ -1,0 +1,15 @@
+{
+    "version": "1",
+    "dir_geotiff": "output-parsl/geotiff",
+    "dir_staged": "output-parsl/staged",
+    "filename_staging_summary": "output-parsl/staging_summary.csv",
+    "filename_rasterization_events": "output-parsl/rasterization_events.csv",
+    "filename_rasters_summary": "output-parsl/rasters_summary.csv",
+    "filename_config": "conf-parsl.json",
+    "ext_input": ".gpkg",
+    "z_range": [
+        0,
+        2
+    ],
+    "enable_3dtiles": false
+}
