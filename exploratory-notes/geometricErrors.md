@@ -42,7 +42,25 @@ There are 2 different bounding volumes to consider:
 | 0    | 0/0      | 3301201  | 1397    |
 | root | NA       | 3301201  | 990     |
  
-**Western Alaska**
+| **Western Alaska**
+| z    | x/y      | asset ge | root ge |
+|------|----------|----------|---------|
+| 13   | 541/1107 | 622      | 622     |
+| 12   | 270/553  | 622      | 622     |
+| 11   | 135/276  | 6839     | 622     |
+| 10   | 67/138   | 10253    | 622     |
+| 9    | 33/69    | 10253    | 622     |
+| 8    | 16/34    | 10253    | 622     |
+| 7    | 8/17     | 10253    | 622     |
+| 6    | 4/8      | 30010    | 622     |
+| 5    | 2/4      | 131342   | 622     |
+| 4    | 1/2      | 390011   | 622     |
+| 3    | 0/1      | 390011   | 2401    |
+| 2    | 0/0      | 1402067  | 1397    |
+| 1    | 0/0      | 3301201  | 1397    |
+| 0    | 0/0      | 3301201  | 1397    |
+| root | NA       | 3301201  | 990     |
+
 
 ## Fix Attempts
 To make the lake vectors pop up at lower zoom levels, I wanted to try increasing the geometric errors (GE) so that vectors would appear earlier. 
