@@ -124,3 +124,27 @@ ges = {0: 1000000,
 Previously, I thought that we just needed a larger GE at the sepcific z-level we wanted them to pop out on. But Gemini said that having the z = 0 to z = 5 be much larger forces them to skip through those levels. 
 
 I noticed that the jsons weren't being loaded in the network tab at other points in the map, even at z = 8. So, it seemed like the cammera was stuck at z = 0 when the geometric error wasn't big enough. 
+
+**Gemini's explanation:**
+> Why this is happening:
+> 3D Tiles traversal is a Top-Down search:
+> 1. Engine loads tileset.json.
+> 2. It sees a child (z=0) with GE = 10.
+> 3. If camera is at z=5 altitude, GE 10 is too small. Search Stops.
+> 4. The engine never even tries to find z=1,z=2... or your z=10.
+> 
+> By setting the GE to 500,000 in those upper levels, you are forcing the engine to say: "Even from the moon, this error is huge! I must download the children to see what's inside."
+
+> If your Network tab is completely silent for z=7,8,and 9 until you hit z=10, it means you aren't just facing a "small" error—you are facing a broken chain of command in your master tileset.json hierarchy.
+
+> In 3D Tiles, the engine can only find z=8 if z=7 tells it to. If the engine doesn't even download the z=7 JSON, it’s because the file above it (z=6) has a Geometric Error so small that the engine thinks the entire branch of the world isn't worth looking at yet.
+> The "Dead Branch" Problem
+
+> If you start seeing files only at z=10, the engine has effectively "fallen asleep" at a much higher level (likely around z=5 or z=6). It only "wakes up" and realizes there is data beneath it when the camera gets close enough to satisfy the tiny Geometric Error in those high-level files.
+> The Solution: The "Master Unlock"
+
+> To fix this, you must look at the file that links to z=7. If z=7 isn't downloading, you need to go to z=6. If z=6 isn't downloading, go to z=5.
+
+> You need to "Electrify" the parent pointers from the top down.
+
+> You need to ensure every level from z=0 to z=9 has a "Loud" enough voice to tell the engine to keep downloading the next level:
