@@ -125,6 +125,10 @@ Previously, I thought that we just needed a larger GE at the sepcific z-level we
 
 I noticed that the jsons weren't being loaded in the network tab at other points in the map, even at z = 8. So, it seemed like the cammera was stuck at z = 0 when the geometric error wasn't big enough. 
 
+![utqiagvik-demo](utqiagvik_example.png)
+
+![west-alaska-demo](west_alaska_example.png)
+
 **Gemini's explanation:**
 > Why this is happening:
 > 3D Tiles traversal is a Top-Down search:
@@ -148,3 +152,14 @@ I noticed that the jsons weren't being loaded in the network tab at other points
 > You need to "Electrify" the parent pointers from the top down.
 
 > You need to ensure every level from z=0 to z=9 has a "Loud" enough voice to tell the engine to keep downloading the next level:
+
+Originally, I just made the asset, root, and children GEs of everything from root to z = 13 to 2,000,000. This works, but it's heavy because it forces the browser to keep every single lake in memory even when you are zoomed out at the global level.
+
+Gemini then recommended the ramp after a certain zoom level.
+
+> To make your lakes "pop" specifically at z=7 or 8, you need to set up a Geometric Error (GE) waterfall.
+
+> The most efficient strategy is to have very large values for the early zoom levels (0–6) to force the engine to skip them quickly, and then "tighten" the error exactly where you want the detail to appear.
+> The GE Waterfall (z=0 to z=13)
+
+> If you want the transition to happen at z=7, the Parent (z=6) needs to have a high enough error to trigger the loading of its children.
