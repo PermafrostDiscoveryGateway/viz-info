@@ -1,0 +1,49 @@
+<svg viewBox="-120 -120 240 240" xmlns="http://www.w3.org/2000/svg" width="400" height="400">
+  <!-- Idealized circle (dotted blue line, no fill) -->
+  <circle cx="0" cy="0" r="100"
+          fill="none"
+          stroke="#3498db"
+          stroke-width="1.5"
+          stroke-dasharray="4,2"/>
+
+  <!-- 8-vertex polygon (solid, no transparency) -->
+  <polygon points="100,0 70.71,70.71 0,100 -70.71,70.71 -100,0 -70.71,-70.71 0,-100 70.71,-70.71"
+           fill="rgba(231,76,60,0.2)"
+           stroke="#e74c3c"
+           stroke-width="2"/>
+
+  <!-- 8-vertex polygon vertices -->
+  <circle cx="100" cy="0" r="3" fill="#e74c3c"/>
+  <circle cx="70.71" cy="70.71" r="3" fill="#e74c3c"/>
+  <circle cx="0" cy="100" r="3" fill="#e74c3c"/>
+  <circle cx="-70.71" cy="70.71" r="3" fill="#e74c3c"/>
+  <circle cx="-100" cy="0" r="3" fill="#e74c3c"/>
+  <circle cx="-70.71" cy="-70.71" r="3" fill="#e74c3c"/>
+  <circle cx="0" cy="-100" r="3" fill="#e74c3c"/>
+  <circle cx="70.71" cy="-70.71" r="3" fill="#e74c3c"/>
+
+  <!-- 5-vertex polygon (on top, with transparency) -->
+  <polygon points="0,-100 95.11,-30.90 58.78,80.90 -58.78,80.90 -95.11,-30.90"
+           fill="rgba(231,76,60,0.2)"
+           stroke="#e74c3c"
+           stroke-width="2"/>
+
+  <!-- 5-vertex polygon vertices -->
+  <circle cx="0" cy="-100" r="4" fill="#e74c3c"/>
+  <circle cx="95.11" cy="-30.90" r="4" fill="#e74c3c"/>
+  <circle cx="58.78" cy="80.90" r="4" fill="#e74c3c"/>
+  <circle cx="-58.78" cy="80.90" r="4" fill="#e74c3c"/>
+  <circle cx="-95.11" cy="-30.90" r="4" fill="#e74c3c"/>
+
+  <!-- Legend -->
+  <g transform="translate(-110, 110)">
+    <line x1="0" y1="6" x2="12" y2="6" stroke="#3498db" stroke-width="1.5" stroke-dasharray="4,2"/>
+    <text x="16" y="10" font-family="Arial, sans-serif" font-size="10" fill="#333">True circle (1000m)</text>
+
+    <rect x="0" y="16" width="12" height="12" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
+    <text x="16" y="26" font-family="Arial, sans-serif" font-size="10" fill="#333">5-vertex polygon</text>
+
+    <rect x="0" y="32" width="12" height="12" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="1"/>
+    <text x="16" y="42" font-family="Arial, sans-serif" font-size="10" fill="#333">8-vertex polygon</text>
+  </g>
+</svg>

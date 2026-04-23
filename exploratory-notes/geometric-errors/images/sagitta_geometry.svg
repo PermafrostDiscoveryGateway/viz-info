@@ -1,0 +1,71 @@
+<svg viewBox="0 0 400 350" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="350" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="200" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2c3e50">Sagitta Geometry</text>
+  
+  <!-- Circle (true arc) -->
+  <circle cx="200" cy="180" r="120" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="5,3"/>
+  
+  <!-- Center point -->
+  <circle cx="200" cy="180" r="4" fill="#2c3e50"/>
+  <text x="215" y="185" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">O</text>
+  
+  <!-- Radius lines -->
+  <line x1="200" y1="180" x2="116" y2="108" stroke="#7f8c8d" stroke-width="1.5"/>
+  <line x1="200" y1="180" x2="284" y2="108" stroke="#7f8c8d" stroke-width="1.5"/>
+  
+  <!-- Chord (polygon edge) -->
+  <line x1="116" y1="108" x2="284" y2="108" stroke="#e74c3c" stroke-width="3"/>
+  
+  <!-- Vertex points -->
+  <circle cx="116" cy="108" r="6" fill="#e74c3c"/>
+  <circle cx="284" cy="108" r="6" fill="#e74c3c"/>
+  
+  <!-- Arc segment (what the chord approximates) -->
+  <path d="M 116 108 A 120 120 0 0 0 284 108" fill="none" stroke="#3498db" stroke-width="3"/>
+  
+  <!-- Chord midpoint -->
+  <circle cx="200" cy="108" r="4" fill="#9b59b6"/>
+  
+  <!-- Arc midpoint (on true circle) -->
+  <circle cx="200" cy="60" r="4" fill="#27ae60"/>
+  
+  <!-- Sagitta line -->
+  <line x1="200" y1="60" x2="200" y2="108" stroke="#27ae60" stroke-width="2"/>
+  
+  <!-- Sagitta brace -->
+  <path d="M 205 60 L 210 60 L 210 108 L 205 108" fill="none" stroke="#27ae60" stroke-width="1"/>
+  
+  <!-- Radius to arc midpoint -->
+  <line x1="200" y1="180" x2="200" y2="60" stroke="#7f8c8d" stroke-width="1" stroke-dasharray="3,3"/>
+  
+  <!-- Angle arc -->
+  <path d="M 200 155 A 25 25 0 0 0 182 165" fill="none" stroke="#f39c12" stroke-width="2"/>
+  <text x="175" y="150" font-family="Arial, sans-serif" font-size="12" fill="#f39c12">θ/2</text>
+  
+  <!-- Labels -->
+  <text x="220" y="78" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#27ae60">s (sagitta)</text>
+  <text x="145" y="140" font-family="Arial, sans-serif" font-size="12" fill="#7f8c8d">R</text>
+  <text x="200" y="125" font-family="Arial, sans-serif" font-size="11" fill="#9b59b6">chord midpoint</text>
+  
+  <!-- Legend -->
+  <rect x="20" y="270" width="360" height="70" fill="#fff" stroke="#ddd" rx="5"/>
+  
+  <line x1="35" y1="290" x2="65" y2="290" stroke="#3498db" stroke-width="2" stroke-dasharray="5,3"/>
+  <text x="75" y="294" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">True circle</text>
+  
+  <line x1="35" y1="310" x2="65" y2="310" stroke="#e74c3c" stroke-width="3"/>
+  <text x="75" y="314" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">Polygon chord</text>
+  
+  <line x1="200" y1="290" x2="230" y2="290" stroke="#27ae60" stroke-width="2"/>
+  <text x="240" y="294" font-family="Arial, sans-serif" font-size="11" fill="#2c3e50">Sagitta (geometric error)</text>
+  
+  <!-- Formula -->
+  <text x="200" y="325" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">
+    <tspan font-weight="bold">s = R × (1 - cos(π/n))</tspan>
+    <tspan dx="10" font-style="italic">where n = vertex count</tspan>
+  </text>
+</svg>
+

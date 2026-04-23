@@ -1,0 +1,156 @@
+<svg viewBox="0 0 700 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="700" height="400" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="350" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="bold" fill="#2c3e50">Polygon Approximations of a Circle</text>
+  
+  <!-- 3 vertices (triangle) -->
+  <g transform="translate(100, 130)">
+    <text x="0" y="-70" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#2c3e50">3 Vertices</text>
+    <text x="0" y="-55" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">Error: 500m</text>
+    
+    <!-- True circle -->
+    <circle cx="0" cy="0" r="55" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="4,2"/>
+    
+    <!-- Triangle -->
+    <polygon points="0,-55 47.6,27.5 -47.6,27.5" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Vertices -->
+    <circle cx="0" cy="-55" r="4" fill="#e74c3c"/>
+    <circle cx="47.6" cy="27.5" r="4" fill="#e74c3c"/>
+    <circle cx="-47.6" cy="27.5" r="4" fill="#e74c3c"/>
+    
+    <!-- Error indicator -->
+    <line x1="24" y1="-14" x2="0" y2="-14" stroke="#27ae60" stroke-width="2"/>
+    <text x="12" y="-18" text-anchor="middle" font-family="Arial, sans-serif" font-size="9" fill="#27ae60">s</text>
+  </g>
+  
+  <!-- 8 vertices (octagon) -->
+  <g transform="translate(280, 130)">
+    <text x="0" y="-70" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#2c3e50">8 Vertices</text>
+    <text x="0" y="-55" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">Error: 76.1m</text>
+    
+    <!-- True circle -->
+    <circle cx="0" cy="0" r="55" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="4,2"/>
+    
+    <!-- Octagon -->
+    <polygon points="0,-55 38.9,-38.9 55,0 38.9,38.9 0,55 -38.9,38.9 -55,0 -38.9,-38.9" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Vertices -->
+    <circle cx="0" cy="-55" r="3" fill="#e74c3c"/>
+    <circle cx="38.9" cy="-38.9" r="3" fill="#e74c3c"/>
+    <circle cx="55" cy="0" r="3" fill="#e74c3c"/>
+    <circle cx="38.9" cy="38.9" r="3" fill="#e74c3c"/>
+    <circle cx="0" cy="55" r="3" fill="#e74c3c"/>
+    <circle cx="-38.9" cy="38.9" r="3" fill="#e74c3c"/>
+    <circle cx="-55" cy="0" r="3" fill="#e74c3c"/>
+    <circle cx="-38.9" cy="-38.9" r="3" fill="#e74c3c"/>
+  </g>
+  
+  <!-- 24 vertices -->
+  <g transform="translate(460, 130)">
+    <text x="0" y="-70" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#2c3e50">24 Vertices</text>
+    <text x="0" y="-55" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">Error: 8.56m</text>
+    
+    <!-- True circle -->
+    <circle cx="0" cy="0" r="55" fill="none" stroke="#3498db" stroke-width="1.5" stroke-dasharray="4,2"/>
+    
+    <!-- 24-gon (approximated) -->
+    <polygon points="0,-55 14.2,-53.1 27.5,-47.6 38.9,-38.9 47.6,-27.5 53.1,-14.2 55,0 53.1,14.2 47.6,27.5 38.9,38.9 27.5,47.6 14.2,53.1 0,55 -14.2,53.1 -27.5,47.6 -38.9,38.9 -47.6,27.5 -53.1,14.2 -55,0 -53.1,-14.2 -47.6,-27.5 -38.9,-38.9 -27.5,-47.6 -14.2,-53.1" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2"/>
+  </g>
+  
+  <!-- 72 vertices -->
+  <g transform="translate(640, 130)">
+    <text x="0" y="-70" text-anchor="middle" font-family="Arial, sans-serif" font-size="13" font-weight="bold" fill="#2c3e50">72 Vertices</text>
+    <text x="0" y="-55" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" fill="#7f8c8d">Error: 0.95m</text>
+    
+    <!-- True circle (virtually identical to polygon at this resolution) -->
+    <circle cx="0" cy="0" r="55" fill="rgba(231,76,60,0.2)" stroke="#e74c3c" stroke-width="2"/>
+  </g>
+  
+  <!--  Zoomed detail views -->
+  <text x="350" y="220" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">Zoomed View: Top Edge Detail</text>
+  
+  <!-- Zoom box for 3 vertices -->
+  <g transform="translate(100, 310)">
+    <rect x="-60" y="-50" width="120" height="80" fill="#fff" stroke="#ddd" stroke-width="1"/>
+    
+    <!-- Arc segment -->
+    <path d="M -50 30 Q 0 -40 50 30" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="4,2"/>
+    
+    <!-- Chord -->
+    <line x1="-50" y1="30" x2="50" y2="30" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Sagitta -->
+    <line x1="0" y1="-35" x2="0" y2="30" stroke="#27ae60" stroke-width="2"/>
+    <text x="8" y="0" font-family="Arial, sans-serif" font-size="10" fill="#27ae60">500m</text>
+    
+    <!-- Shaded error region -->
+    <path d="M -50 30 Q 0 -40 50 30 L -50 30" fill="rgba(39,174,96,0.2)"/>
+  </g>
+  
+  <!-- Zoom box for 8 vertices -->
+  <g transform="translate(280, 310)">
+    <rect x="-60" y="-50" width="120" height="80" fill="#fff" stroke="#ddd" stroke-width="1"/>
+    
+    <!-- Arc segment -->
+    <path d="M -50 20 Q 0 -30 50 20" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="4,2"/>
+    
+    <!-- Chord -->
+    <line x1="-50" y1="20" x2="50" y2="20" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Sagitta (smaller) -->
+    <line x1="0" y1="-25" x2="0" y2="20" stroke="#27ae60" stroke-width="2"/>
+    <text x="8" y="0" font-family="Arial, sans-serif" font-size="10" fill="#27ae60">76m</text>
+    
+    <!-- Shaded error region -->
+    <path d="M -50 20 Q 0 -30 50 20 L -50 20" fill="rgba(39,174,96,0.2)"/>
+  </g>
+  
+  <!-- Zoom box for 24 vertices -->
+  <g transform="translate(460, 310)">
+    <rect x="-60" y="-50" width="120" height="80" fill="#fff" stroke="#ddd" stroke-width="1"/>
+    
+    <!-- Arc segment -->
+    <path d="M -50 15 Q 0 -5 50 15" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="4,2"/>
+    
+    <!-- Chord -->
+    <line x1="-50" y1="15" x2="50" y2="15" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Sagitta (even smaller) -->
+    <line x1="0" y1="-2" x2="0" y2="15" stroke="#27ae60" stroke-width="2"/>
+    <text x="8" y="8" font-family="Arial, sans-serif" font-size="10" fill="#27ae60">8.6m</text>
+    
+    <!-- Shaded error region -->
+    <path d="M -50 15 Q 0 -5 50 15 L -50 15" fill="rgba(39,174,96,0.2)"/>
+  </g>
+  
+  <!-- Zoom box for 72 vertices -->
+  <g transform="translate(640, 310)">
+    <rect x="-60" y="-50" width="120" height="80" fill="#fff" stroke="#ddd" stroke-width="1"/>
+    
+    <!-- Arc segment (nearly straight) -->
+    <path d="M -50 10 Q 0 5 50 10" fill="none" stroke="#3498db" stroke-width="2" stroke-dasharray="4,2"/>
+    
+    <!-- Chord (nearly overlapping) -->
+    <line x1="-50" y1="10" x2="50" y2="10" stroke="#e74c3c" stroke-width="2"/>
+    
+    <!-- Sagitta (tiny) -->
+    <line x1="0" y1="6" x2="0" y2="10" stroke="#27ae60" stroke-width="2"/>
+    <text x="8" y="10" font-family="Arial, sans-serif" font-size="10" fill="#27ae60">0.95m</text>
+  </g>
+  
+  <!-- Legend -->
+  <g transform="translate(350, 385)">
+    <line x1="-150" y1="0" x2="-120" y2="0" stroke="#3498db" stroke-width="2" stroke-dasharray="4,2"/>
+    <text x="-115" y="4" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">True circle</text>
+    
+    <line x1="-50" y1="0" x2="-20" y2="0" stroke="#e74c3c" stroke-width="2"/>
+    <text x="-15" y="4" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">Polygon edge</text>
+    
+    <rect x="60" y="-5" width="15" height="10" fill="rgba(39,174,96,0.3)" stroke="#27ae60"/>
+    <text x="80" y="4" font-family="Arial, sans-serif" font-size="10" fill="#2c3e50">Error region</text>
+  </g>
+</svg>
+

@@ -1,0 +1,73 @@
+<svg viewBox="0 0 600 300" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="600" height="300" fill="#fafafa"/>
+  
+  <!-- Title -->
+  <text x="300" y="25" text-anchor="middle" font-family="Arial, sans-serif" font-size="14" font-weight="bold" fill="#2c3e50">Geometric Error vs. Vertex Count (R = 1000m)</text>
+  
+  <!-- Axes -->
+  <line x1="80" y1="250" x2="550" y2="250" stroke="#2c3e50" stroke-width="2"/>
+  <line x1="80" y1="250" x2="80" y2="50" stroke="#2c3e50" stroke-width="2"/>
+  
+  <!-- X-axis label -->
+  <text x="315" y="285" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50">Vertex Count</text>
+  
+  <!-- Y-axis label -->
+  <text x="25" y="150" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" fill="#2c3e50" transform="rotate(-90, 25, 150)">Geometric Error (m)</text>
+  
+  3e50" stroke-width="2"/>
+  <text x="70" y="104" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">300</text>
+  
+  <line x1="75" y1="50" x2="80" y2="50" stroke="#2c3e50" stroke-width="2"/>
+  <text x="70" y="54" text-anchor="end" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">400</text>
+  
+  <!-- X-axis ticks and labels -->
+  <line x1="130" y1="250" x2="130" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="130" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">3</text>
+  
+  <line x1="200" y1="250" x2="200" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="200" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">8</text>
+  
+  <line x1="280" y1="250" x2="280" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="280" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">24</text>
+  
+  <line x1="360" y1="250" x2="360" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="360" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">72</text>
+  
+  <line x1="440" y1="250" x2="440" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="440" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">216</text>
+  
+  <line x1="520" y1="250" x2="520" y2="255" stroke="#2c3e50" stroke-width="2"/>
+  <text x="520" y="268" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">648</text>
+  
+  <!-- Curve (1/n² decay) -->
+  <path d="M 130 0 Q 150 150 200 212 Q 250 238 280 246 Q 320 249 360 249.5 L 440 249.8 L 520 249.9" fill="none" stroke="#3498db" stroke-width="3" clip-path="url(#chartClip)"/>
+  
+  <defs>
+    <clipPath id="chartClip">
+      <rect x="80" y="50" width="470" height="200"/>
+    </clipPath>
+  </defs>
+  
+  <!-- Data points -->
+  <circle cx="130" cy="50" r="6" fill="#e74c3c"/>
+  <text x="140" y="45" font-family="Arial, sans-serif" font-size="9" fill="#e74c3c">500m</text>
+  
+  <circle cx="200" cy="212" r="6" fill="#e74c3c"/>
+  <text x="210" y="207" font-family="Arial, sans-serif" font-size="9" fill="#e74c3c">76.1m</text>
+  
+  <circle cx="280" cy="246" r="6" fill="#e74c3c"/>
+  <text x="290" y="241" font-family="Arial, sans-serif" font-size="9" fill="#e74c3c">8.56m</text>
+  
+  <circle cx="360" cy="249.5" r="6" fill="#e74c3c"/>
+  <text x="365" y="240" font-family="Arial, sans-serif" font-size="9" fill="#e74c3c">0.95m</text>
+  
+  <circle cx="440" cy="249.8" r="6" fill="#e74c3c"/>
+  <circle cx="520" cy="249.9" r="6" fill="#e74c3c"/>
+  
+  <!-- Annotation -->
+  <rect x="380" y="70" width="160" height="50" fill="#fff" stroke="#ddd" rx="3"/>
+  <text x="460" y="90" text-anchor="middle" font-family="Arial, sans-serif" font-size="11" font-weight="bold" fill="#2c3e50">Key Insight</text>
+  <text x="460" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">Error scales with 1/n²</text>
+  <text x="460" y="118" text-anchor="middle" font-family="Arial, sans-serif" font-size="10" fill="#7f8c8d">2× vertices → 4× less error</text>
+</svg>
