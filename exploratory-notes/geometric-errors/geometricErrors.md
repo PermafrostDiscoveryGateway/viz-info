@@ -125,9 +125,9 @@ Previously, I thought that we just needed a larger GE at the sepcific z-level we
 
 I noticed that the jsons weren't being loaded in the network tab at other points in the map, even at z = 8. So, it seemed like the cammera was stuck at z = 0 when the geometric error wasn't big enough. 
 
-![utqiagvik-demo](utqiagvik_example.png)
+![utqiagvik-demo](images/utqiagvik_example.png)
 
-![west-alaska-demo](west_alaska_example.png)
+![west-alaska-demo](images/west_alaska_example.png)
 
 **Gemini's explanation:**
 > Why this is happening:
